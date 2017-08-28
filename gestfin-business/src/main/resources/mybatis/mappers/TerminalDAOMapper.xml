@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TerminalDAO">
+
+	<select id="listTerminals" parameterType="map" resultMap="TerminalDTO_ResultMap">
+		<![CDATA[
+			SELECT T.TerminalId
+			     , T.TerminalNumber
+			     , T.Description
+			     , T.OperatorID
+			     , T.EstablishmentID
+			     , T.isActive
+			     , T.LastUpdateDate
+			     , T.LastUpdatedByUser
+			     , O.Name as OperatorName
+			     , E.Name as EstablishmentName
+			  FROM [Terminal] T															
+			 INNER JOIN [Operator] O ON O.ID = T.OperatorID
+			 INNER JOIN [Establishment] E ON E.ID = T.EstablishmentID
+			 WHERE 1 = 1															
+       	]]>
+		<if test="PARAM_TERMINAL_NUMBER != null">
+		<![CDATA[
+			   AND T.TerminalNumber LIKE #{PARAM_TERMINAL_NUMBER} + '%'
+       	]]>
+		</if>
+		<if test="PARAM_DESCRIPTION != null">
+		<![CDATA[
+			   AND T.Description LIKE #{PARAM_DESCRIPTION} + '%'
+       	]]>
+		</if>
+		<if test="PARAM_OPERATOR_ID != null">
+		<![CDATA[
+			   AND T.OperatorID = #{PARAM_OPERATOR_ID}
+       	]]>
+		</if> 
+		<if test="PARAM_Establishment_ID != null">
+		<![CDATA[
+			   AND T.EstablishmentID = #{PARAM_Establishment_ID}
+       	]]>
+		</if> 
+		<![CDATA[
+			 ORDER BY T.Description
+		]]>
+	</select>
+
+	<update id="updateTerminal" parameterType="TerminalDTO">
+		<![CDATA[
+			UPDATE [Terminal]																										
+			   SET TerminalNumber    = #{terminalNumber,	jdbcType=VARCHAR}
+			     , Description       = #{description, 		jdbcType=VARCHAR}
+			     , OperatorID        = #{operator.id, 		jdbcType=NUMERIC}
+			     , EstablishmentID   = #{establishment.id,	jdbcType=NUMERIC}
+			     , IsActive	         = #{isActive,	 		jdbcType=VARCHAR}
+			     , LastUpdateDate    = #{lastUpdateDate}
+			     , LastUpdatedByUser = #{lastUpdatedByUser,	jdbcType=VARCHAR}
+			 WHERE TerminalId        = #{terminalId,		jdbcType=NUMERIC}
+		]]>
+	</update>
+
+	<insert id="insertTerminal" parameterType="TerminalDTO"
+		useGeneratedKeys="true" keyProperty="terminalId" keyColumn="TerminalId">
+		<![CDATA[
+			INSERT INTO [Terminal] ( TerminalNumber
+			                   , Description
+			                   , OperatorID
+			                   , EstablishmentID
+			                   , IsActive
+			                   , LastUpdateDate
+			                   , LastUpdatedByUser )																																																																					
+			            VALUES ( #{terminalNumber, 			jdbcType=VARCHAR}																																																																
+							   , #{description,				jdbcType=VARCHAR}																																																															
+							   , #{operator.id,				jdbcType=NUMERIC}																																																															
+							   , #{establishment.id,		jdbcType=NUMERIC}																																																															
+							   , #{isActive,				jdbcType=VARCHAR}																																																															
+							   , #{lastUpdateDate}																																																															
+							   , #{lastUpdatedByUser,		jdbcType=VARCHAR} )																																																															
+		]]>
+		<selectKey keyProperty="terminalId" resultType="java.lang.Integer" order="AFTER">
+        	SELECT @@IDENTITY as terminalId
+       </selectKey>
+	</insert>
+
+	<delete id="deleteTerminal" parameterType="TerminalDTO">
+		<![CDATA[
+			DELETE FROM [Terminal] 
+				WHERE TerminalId = #{terminalId, jdbcType=NUMERIC}																																																													
+		]]>
+	</delete>
+
+	<resultMap id="TerminalDTO_ResultMap" type="TerminalDTO">
+		<id property="terminalId" column="TerminalId" />
+		<result property="terminalNumber" column="TerminalNumber" />
+		<result property="description" column="Description" />
+		<result property="operator.id" column="OperatorID" />
+		<result property="operator.name" column="OperatorName" />
+		<result property="establishment.id" column="EstablishmentID" />
+		<result property="establishment.name" column="EstablishmentName" />
+		<result property="isActive" column="IsActive" />
+		<result property="lastUpdateDate" column="LastUpdateDate" />
+		<result property="lastUpdatedByUser" column="LastUpdatedByUser" />
+	</resultMap>
+
+</mapper>

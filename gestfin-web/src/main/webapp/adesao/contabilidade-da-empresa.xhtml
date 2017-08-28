@@ -1,0 +1,161 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/#{msCompanyAccountancyView.pageTemplate}.xhtml">
+            <ui:param name="templateBean" value="#{msCompanyAccountancyView}" />
+            <ui:define name="content">
+			    <h:panelGroup id="pnlCompanyAccountancy" styleClass="body-contents" layout="block">
+			        <h:form id="formCompanyAccountancy" prependId="false"
+		        		onkeypress="if (event.keyCode == 13) { $('#btnNext').trigger('click'); return false; }">
+						<script type="text/javascript">
+							var hasError = #{msCompanyAccountancyView.hasError};
+						    function checkError(data){
+					           	if(data.status == 'success'){
+						        	if (hasError) {
+						           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+							        }
+					           	}
+							}
+						</script>
+			        	<!-- Mensagens de erro e informação -->
+			            <h:panelGroup styleClass="form-messages" id="msgError" layout="block">
+			            	<h:messages id="messages-id" errorClass="err" infoClass="info" warnClass="warn"/>
+			            </h:panelGroup>		        
+			            <div class="panel panel-default">
+			                <!-- Título do passo da avaliação (tablet e desktop) -->
+			                <div class="panel-heading hidden-xs">
+			                    <div class="header-simple">
+			                        <span data-index="1">
+			                        	<h:outputText rendered="#{pageNavigationBean.loggedUser eq null}"
+			                        		value="#{i18n['membership.company_accountancy.title']}" />
+		                        		<h:outputText rendered="#{pageNavigationBean.loggedUser ne null}"
+			                        		value="#{i18n['membership.company_accountancy.title.logged']}" /></span>
+			                    </div>
+			                </div>
+			                <div class="panel-body no-padding">
+			                    <div class="container-fluid no-padding">
+			                        <div class="row-fluid">
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.name.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText
+												styleClass="text-input" 
+												value="#{msCompanyAccountancyView.name}" 
+												pt:type="text"  
+												pt:placeholder="#{i18n['membership.company_accountancy.name.placeholder']}" 
+												pt:maxlength="100">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.documentnumber.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText 
+												styleClass="cnpj-input" 
+												value="#{msCompanyAccountancyView.documentNumber}" 
+												pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_accountancy.documentnumber.placeholder']}" 
+												pt:maxlength="18"
+												converter="customCnpjConverter">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                        
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.sponsor.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText 
+												styleClass="text-input" 
+												value="#{msCompanyAccountancyView.sponsor}" 
+												pt:type="text"  
+												pt:placeholder="#{i18n['membership.company_accountancy.sponsor.placeholder']}" 
+												pt:maxlength="100">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.phone_number.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText 
+												styleClass="phone-input"
+												value="#{msCompanyAccountancyView.phoneNumber}"
+												pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_accountancy.phone_number.placeholder']}" 
+												pt:maxlength="20"
+												converter="customPhoneConverter">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.mail.label']}" />
+			                            </div>
+			                            <div class="col-xs-6 col-sm-4 field-padding-12">
+											<h:inputText 
+												styleClass="text-input" 
+												value="#{msCompanyAccountancyView.mail}"
+												pt:type="email"
+												pt:placeholder="#{i18n['membership.company_accountancy.mail.placeholder']}" 
+												pt:maxlength="255" />
+			                            </div>
+			                            <div class="col-sm-6 hidden-xs"></div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+													                        
+			                            <!-- Botões inferiores -->
+										<div class="col-xs-12 col-sm-12 bottom-border"></div>
+										<ui:fragment rendered="#{pageNavigationBean.loggedUser eq null or pageNavigationBean.userLoggedOwnerCompanyId eq null}">
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn normal-button" id="btnBack"
+				                                	value="#{i18n['btn.back']}" action="#{msCompanyAccountancyView.actionBack}">
+				                                	<f:ajax execute="@form" event="action" render="@form" />
+				                                </h:commandButton>
+				                            </div>
+				                            <div class="col-xs-2 col-sm-8"></div>
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn default-button" id="btnNext" 
+				                                	value="#{i18n['btn.next']}" action="#{msCompanyAccountancyView.actionNext}">
+				                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+				                                </h:commandButton>
+				                            </div>
+										</ui:fragment>
+										<ui:fragment rendered="#{pageNavigationBean.loggedUser ne null and pageNavigationBean.userLoggedOwnerCompanyId ne null}">
+				                            <div class="col-xs-7 col-sm-10"></div>
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn default-button" id="btnSave" 
+				                                	value="#{i18n['btn.save']}" action="#{msCompanyAccountancyView.actionSave}">
+				                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+				                                </h:commandButton>
+				                            </div>
+										</ui:fragment>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				        <script>
+					        //-- Formatação
+					        applyCnpjMask('.cnpj-input');
+					        applyPhoneMask('.phone-input');
+					        applyAndroidMaxLength('.text-input');
+				        </script>
+			        </h:form>
+			    </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+	</h:body>
+</html>

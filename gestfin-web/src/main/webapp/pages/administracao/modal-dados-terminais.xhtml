@@ -1,0 +1,370 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+<h:body>
+	<script type="text/javascript">
+			var hasError;
+	        function closeNewModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-terminal-add').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeEditModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-terminal-edit').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeDeleteModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-terminal-delete').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+        </script>
+
+	<h:panelGroup id="popup-dados-terminal-edit" styleClass="modal fade"
+		pt:role="dialog" layout="block">
+		<h:form id="formEdit" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<!-- <button type="button" class="close" data-dismiss="modal">X</button> -->
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{terminalRegisterView.closeModal}"
+							value="X">
+							<f:ajax execute="@form" render="dialog-id messageGlobal" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['terminal_maintain.edit.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorEdit">
+							<h:messages id="message-maintain-edit-modal-terminalid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.terminal.number']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.terminal.number']}"
+										value="#{terminalRegisterView.editTerminalNumber}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.description']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.description']}"
+										value="#{terminalRegisterView.editDescription}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['terminal_maintain.label.operator']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{terminalRegisterView.editOperator}">
+										<f:selectItem itemLabel="#{i18n['terminal.record.select.label']}" />
+										<f:selectItems value="#{terminalRegisterView.listOperators}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['terminal_maintain.label.establishment']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{terminalRegisterView.editEstablishment}">
+										<f:selectItem itemLabel="#{i18n['terminal.record.select.label']}" />
+										<f:selectItems value="#{terminalRegisterView.listEstablishments}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.active']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<my:checkBox name="check-edit"
+										value="#{terminalRegisterView.editActive}" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{terminalRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.save']}">
+										<f:ajax listener="#{terminalRegisterView.actionEditSave}"
+											execute="@form"
+											render="@form pnlTerminalRegister messageGlobal formTerminalRegister"
+											onevent="closeEditModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+					hasError = #{terminalRegisterView.hasError};
+					$('.cpf-cnpj-input').mask(cpfCnpjBehavior, cpfCnpjOptions);
+				</script>
+		</h:form>
+	</h:panelGroup>
+
+	<h:panelGroup id="popup-dados-terminal-add" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formNewTerminal" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{terminalRegisterView.closeModal}"
+							value="X">
+							<f:ajax render="dialog-id" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['terminal_maintain.add.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorNewTerminal"
+							layout="block">
+							<h:messages id="message-maintain-add-modal-terminalid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.terminal.number']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.terminal.number']}"
+										value="#{terminalRegisterView.editTerminalNumber}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.description']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.description']}"
+										value="#{terminalRegisterView.editDescription}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['terminal_maintain.label.operator']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{terminalRegisterView.editOperator}">
+										<f:selectItem itemLabel="#{i18n['terminal.record.select.label']}" />
+										<f:selectItems value="#{terminalRegisterView.listOperators}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['terminal_maintain.label.establishment']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{terminalRegisterView.editEstablishment}">
+										<f:selectItem itemLabel="#{i18n['terminal.record.select.label']}" />
+										<f:selectItems value="#{terminalRegisterView.listEstablishments}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.active']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<my:checkBox name="check-new"
+										value="#{terminalRegisterView.editActive}" disabled="true" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{terminalRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.save']}">
+										<f:ajax listener="#{terminalRegisterView.actionNewTerminal}"
+											execute="@form"
+											render="@form pnlTerminalRegister messageGlobal formTerminalRegister"
+											onevent="closeNewModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+					hasError = #{terminalRegisterView.hasError};
+ 				</script>
+		</h:form>
+	</h:panelGroup>
+	
+	<h:panelGroup id="popup-dados-terminal-delete" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formDeleteTerminal" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{terminalRegisterView.closeModal}"
+							value="X">
+							<f:ajax render="dialog-id" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['terminal_maintain.delete.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorDeleteTerminal"
+							layout="block">
+							<h:messages id="message-maintain-delete-modal-terminalid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.terminal.number']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.terminal.number']}"
+										value="#{terminalRegisterView.editTerminalNumber}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['terminal_maintain.label.description']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['terminal_maintain.edit.input.description']}"
+										value="#{terminalRegisterView.editDescription}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{terminalRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.delete']}">
+										<f:ajax listener="#{terminalRegisterView.actionDeleteTerminal}"
+											execute="@form"
+											render="@form pnlTerminalRegister messageGlobal formTerminalRegister"
+											onevent="closeDeleteModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+					hasError = #{terminalRegisterView.hasError};
+ 				</script>
+		</h:form>
+	</h:panelGroup>
+	<script type="text/javascript">
+		</script>
+</h:body>
+</html>

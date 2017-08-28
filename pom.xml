@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.nsol</groupId>
+	<artifactId>gestfin</artifactId>
+	<version>${gestfin.version}</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<contextRoot>gestfin-web</contextRoot>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<targetJdk>1.8</targetJdk>
+		<!-- maven-compiler-plugin -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<sonar.exclusions>**src/main/java/br/com/toyota/ucar/ws/svt/**</sonar.exclusions>
+		<gestfin.version>1.1.0-RC1</gestfin.version>
+		<batch.version>1.0.0.5</batch.version>
+	</properties>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<distributionManagement>
+		<repository>
+			<id>artifactory</id>
+			<url>${artifactory.libsReleasesLocalUrl}/</url>
+		</repository>
+		<snapshotRepository>
+			<id>artifactory</id>
+			<url>${artifactory.libsSnapshotsLocalUrl}</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<modules>
+		<module>gestfin-client</module>
+		<module>gestfin-common</module>
+		<module>gestfin-business</module>
+		<module>gestfin-web</module>
+		<module>gestfin-ear</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- EhCache -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>1.7.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>gestfin-ear</finalName>
+		<plugins>
+			<!-- sonar-maven2 plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>1.0-beta-2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

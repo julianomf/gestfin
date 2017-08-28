@@ -1,0 +1,18 @@
+<div class="form-error" style="display: none">
+	<label>Error message...</label>
+</div>
+<div class="form-info" style="display: none">
+	<label>Information message...</label>
+</div>
+<script>
+    function showErrorMessage(msg) {
+        $('.form-error label').text(msg);
+        $('.form-error').show();
+        $('.form-info').hide();
+    }
+    function showInfoMessage(msg) {
+        $('.form-info label').text(msg);
+        $('.form-info').show();
+        $('.form-error').hide();
+    }
+</script>

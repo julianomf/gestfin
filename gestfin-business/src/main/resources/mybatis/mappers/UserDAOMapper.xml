@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserDAO">
+
+	<select id="listUsers" parameterType="map" resultMap="UserDTO_ResultMap">
+		<![CDATA[
+			SELECT U.UserID
+			     , U.UserName															
+			     , U.UserMail															
+			     , U.UserPassword															
+			     , U.IsPasswordReseted															
+			     , U.ProfileID															
+			     , U.IsActive															
+			     , U.LastUpdateDate															
+			     , U.LastUpdatedByUser															
+			     , P.ProfileName		
+			     , C.Id CompanyId													
+			  FROM [User] U															
+			 INNER JOIN [Profile] P															
+			    ON P.ProfileID = U.ProfileID								
+			  LEFT JOIN [Company] C
+			    ON C.OwnerId = U.UserID							
+			 WHERE 1 = 1															
+       	]]>
+		<if test="PARAM_NAME != null">
+		<![CDATA[
+			   AND U.UserName LIKE #{PARAM_NAME} + '%'
+       	]]>
+		</if>
+		<if test="PARAM_EMAIL != null">
+		<![CDATA[
+			   AND (
+			   		U.UserMail LIKE '%' + #{PARAM_EMAIL} OR 
+			   		U.UserMail LIKE #{PARAM_EMAIL} + '%'
+			   	   )
+       	]]>
+		</if>
+		<if test="PARAM_PROFILEID != null">
+		<![CDATA[
+			   AND U.ProfileID = #{PARAM_PROFILEID}
+       	]]>
+		</if> 
+		<![CDATA[
+			 ORDER BY U.UserName
+		]]>
+	</select>
+
+	<select id="findUserByMail" parameterType="map" resultMap="UserDTO_ResultMap">
+		<![CDATA[
+			SELECT U.UserID
+			     , U.UserName															
+			     , U.UserMail															
+			     , U.UserPassword															
+			     , U.IsPasswordReseted															
+			     , U.ProfileID															
+			     , U.IsActive															
+			     , U.LastUpdateDate															
+			     , U.LastUpdatedByUser															
+			     , P.ProfileName
+			     , C.Id CompanyId															
+			  FROM [User] U															
+			 INNER JOIN [Profile] P															
+			    ON P.ProfileID = U.ProfileID															
+			  LEFT JOIN [Company] C
+			    ON C.OwnerId = U.UserID							
+			 WHERE UPPER(U.UserMail) = UPPER(#{PARAM_EMAIL})
+		]]>
+	</select>
+
+	<select id="findUserById" parameterType="map" resultMap="UserDTO_ResultMap">
+		<![CDATA[
+			SELECT U.UserID
+			     , U.UserName															
+			     , U.UserMail															
+			     , U.UserPassword															
+			     , U.IsPasswordReseted															
+			     , U.ProfileID															
+			     , U.IsActive															
+			     , U.LastUpdateDate															
+			     , U.LastUpdatedByUser															
+			     , P.ProfileName
+			     , C.Id CompanyId															
+			  FROM [User] U															
+			 INNER JOIN [Profile] P															
+			    ON P.ProfileID = U.ProfileID															
+			  LEFT JOIN [Company] C
+			    ON C.OwnerId = U.UserID							
+			 WHERE U.UserID = #{PARAM_USERID}
+		]]>
+	</select>
+
+	<update id="updateUser" parameterType="UserDTO">
+		<![CDATA[
+			UPDATE [User]																										
+			   SET UserName          = #{userName,			jdbcType=VARCHAR}																										
+			     , UserMail          = #{userMail, 			jdbcType=NUMERIC}																										
+			     , ProfileID         = #{profileId, 		jdbcType=VARCHAR}																									
+			     , LastUpdateDate    = #{lastUpdateDate}																										
+			     , LastUpdatedByUser = #{lastUpdatedByUser,	jdbcType=VARCHAR}																										
+			 WHERE UserId            = #{userId,			jdbcType=NUMERIC}																										
+		]]>
+	</update>
+
+	<update id="updateUserAndPassword" parameterType="UserDTO">
+		<![CDATA[
+			UPDATE [User]																										
+			   SET UserName          = #{userName,			jdbcType=VARCHAR}																										
+			     , UserMail          = #{userMail, 			jdbcType=NUMERIC}																										
+			     , ProfileID         = #{profileId, 		jdbcType=VARCHAR}																									
+			     , LastUpdateDate    = #{lastUpdateDate}																										
+			     , LastUpdatedByUser = #{lastUpdatedByUser,	jdbcType=VARCHAR}																										
+                 , UserPassword      = #{userPassword,		jdbcType=VARCHAR}
+                 , IsPasswordReseted = 'N'
+			 WHERE UserId            = #{userId,			jdbcType=NUMERIC}																										
+		]]>
+	</update>
+
+	<insert id="insertUser" parameterType="UserDTO">
+  		<selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+  			SELECT @@IDENTITY as userId
+		</selectKey>
+		<![CDATA[
+			INSERT INTO [User] ( UserName
+			                   , UserMail
+			                   , UserPassword
+			                   , IsPasswordReseted
+			                   , ProfileID
+			                   , IsActive
+			                   , LastUpdateDate
+			                   , LastUpdatedByUser )																																																																					
+			            VALUES ( #{userName, 			jdbcType=VARCHAR}																																																																
+							   , #{userMail,			jdbcType=VARCHAR}																																																															
+							   , #{userPassword,		jdbcType=VARCHAR}																																																															
+							   , #{isPasswordReseted,	jdbcType=VARCHAR}																																																															
+							   , #{profileId,			jdbcType=NUMERIC}																																																															
+							   , #{isActive,			jdbcType=VARCHAR}																																																															
+							   , #{lastUpdateDate}																																																															
+							   , #{lastUpdatedByUser,	jdbcType=VARCHAR} )																																																															
+		]]>
+	</insert>
+
+	<select id="validateUserPassword" parameterType="map"
+		resultType="string">
+		<![CDATA[
+			SELECT TOP 1 'T' --Profile																								
+  			  FROM [User]																								
+ 			 WHERE UPPER(UserMail) = UPPER(#{PARAM_EMAIL})																								
+   			   AND UserPassword    = #{PARAM_PASSWORD}
+   			   AND IsActive        = 'A'																								
+		]]>
+	</select>
+
+	<update id="updateUserPassword" parameterType="map">
+		<![CDATA[
+			UPDATE [User]																		
+		   	   SET UserPassword      = #{PARAM_PASSWORD}																							
+		     	 , IsPasswordReseted = #{PARAM_RESET}																							
+		 	 WHERE UPPER(UserMail)   = UPPER(#{PARAM_EMAIL})																							
+		]]>
+	</update>
+
+	<resultMap id="UserDTO_ResultMap" type="UserDTO">
+		<result property="userId" column="UserId" />
+		<result property="userName" column="UserName" />
+		<result property="userMail" column="UserMail" />
+		<result property="userPassword" column="UserPassword" />
+		<result property="profileId" column="ProfileId" />
+		<result property="profileName" column="ProfileName" />
+		<result property="isPasswordReseted" column="IsPasswordReseted" />
+		<result property="isActive" column="IsActive" />
+		<result property="lastUpdateDate" column="LastUpdateDate" />
+		<result property="lastUpdatedByUser" column="LastUpdatedByUser" />
+		<result property="companyId" column="CompanyId" />
+	</resultMap>
+
+</mapper>

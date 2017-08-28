@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<meta charset="utf-8" />
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+	<meta name="apple-mobile-web-app-title" content="NSOL" />
+
+	<title>#{i18n['membership.title']}</title>
+
+	<h:outputScript name="frameworks/jquery/jquery-2.2.3.min.js" />
+	<h:outputStylesheet name="frameworks/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<h:outputScript name="frameworks/bootstrap/3.3.6/js/bootstrap.min.js" />
+	<h:outputStylesheet name="stylesheets/nsol-gestfin-#{pageNavigationBean.cssVersion}.css" />
+	<h:outputScript name="javascripts/nsol-gestfin.js?#{pageNavigationBean.javaScriptVersion}" />
+</h:head>
+<h:body>
+	<div class="container-fluid form-body">
+		<div class="row-fluid">
+			<div class="hidden-xs col-sm-2 col-md-3"></div>
+			<div class="col-xs-12 col-sm-8 col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-body no-padding">
+						<header class="form-header">
+							<h1>
+								<h:graphicImage value="/resources/images/logo-101x84.png" />
+							</h1>
+							<p>#{i18n['membership.text.1']}</p>
+							<p>#{i18n['membership.text.2']}</p>
+						</header>
+				        <h:form id="formStart" prependId="false"
+			        		onkeypress="if (event.keyCode == 13) { $('#btnContinue').trigger('click'); return false; }">
+							<script type="text/javascript">
+								var hasError = #{membershipView.hasError};
+							    function checkError(data){
+						           	if(data.status == 'success'){
+							        	if (hasError) {
+							           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+								        }
+						           	}
+								}
+							</script>
+							<div class="row-fluid">
+								<div class="col-xs-12 col-sm-12  form-error" style="display: #{membershipView.hasError ? 'display' : 'none'}">
+									<h:outputLabel value="#{membershipView.errorMessage}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 field-label-12">
+									<h:outputLabel
+										value="#{i18n['membership.email.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-12  field-padding-12">
+									<h:inputText 
+										id="j_usermail"
+										value="#{membershipView.userMail}"
+										styleClass="text-input"
+										pt:type="email"
+										pt:placeholder="#{i18n['membership.email.placeholder']}" 
+										pt:maxlength="255" />
+								</div>
+								<div class="col-xs-12 col-sm-12  button-padding-12">
+	                                <h:commandButton styleClass="btn default-button" id="btnContinue" 
+	                                	value="#{i18n['btn.continue']}" action="#{membershipView.actionStart}">
+	                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+	                                </h:commandButton>
+								</div>
+								<div class="col-xs-12 col-sm-12  button-padding-12">
+								</div>
+							</div>
+							<script>
+								//-- Formatação
+								applyAndroidMaxLength('.text-input');
+							</script>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

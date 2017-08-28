@@ -1,0 +1,77 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false"
+	monitoring="autodetect">
+	<diskStore path="java.io.tmpdir" />
+
+	<defaultCache maxElementsInMemory="10" eternal="false"
+		timeToIdleSeconds="30" timeToLiveSeconds="30" overflowToDisk="false"
+		memoryStoreEvictionPolicy="LRU" />
+
+
+	<cache name="REGION_0001_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="60" timeToLiveSeconds="60"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0002_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0003_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="180" timeToLiveSeconds="180"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0005_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="300" timeToLiveSeconds="300"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+
+	<cache name="REGION_0010_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0015_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="900" timeToLiveSeconds="900"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0020_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="1200" timeToLiveSeconds="1200"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0030_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="1800" timeToLiveSeconds="1800"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0060_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="3600" timeToLiveSeconds="3600"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0120_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="7200" timeToLiveSeconds="7200"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0360_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_0720_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="43200" timeToLiveSeconds="43200"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+	<cache name="REGION_1440_MIN" maxElementsInMemory="300" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400"
+		memoryStoreEvictionPolicy="LFU">
+	</cache>
+
+</ehcache>

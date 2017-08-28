@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CompanyDAO">
+
+	<select id="findCompanyByMail" parameterType="map" resultMap="CompanyDTO_ResultMap">
+		<![CDATA[
+			SELECT C.Id
+			     , C.KindOfPerson 															
+			     , C.DocumentNumber														
+			     , C.SocialName															
+			     , C.FantasyName															
+			     , C.StateRegistration															
+			     , C.IsFreeFromStateRegistration															
+			     , C.MunicipalRegistration															
+			     , C.TaxRegimeId		
+			     , TR.Name TaxRegimeName													
+			     , C.CNAE															
+			     , C.Sponsor															
+			     , C.OwnerId 															
+			     , C.Status															
+			     , C.LastUpdateDate															
+			     , C.IpAddress															
+			     , C.MembershipDate
+			  FROM [Company] C
+			 INNER JOIN [User] U ON U.UserID = C.OwnerId
+			 INNER JOIN [TaxRegime] TR ON TR.Id = C.TaxRegimeId															
+			 WHERE U.UserMail = #{PARAM_EMAIL}
+		]]>
+	</select>
+
+	<select id="findCompanyById" parameterType="map" resultMap="CompanyDTO_ResultMap">
+		<![CDATA[
+			SELECT C.Id
+			     , C.KindOfPerson 															
+			     , C.DocumentNumber														
+			     , C.SocialName															
+			     , C.FantasyName															
+			     , C.StateRegistration															
+			     , C.IsFreeFromStateRegistration															
+			     , C.MunicipalRegistration															
+			     , C.TaxRegimeId															
+			     , TR.Name TaxRegimeName
+			     , C.CNAE															
+			     , C.Sponsor															
+			     , C.OwnerId 															
+			     , C.Status															
+			     , C.LastUpdateDate															
+			     , C.IpAddress
+			     , C.MembershipDate															
+			  FROM [Company] C
+			 INNER JOIN [TaxRegime] TR ON TR.Id = C.TaxRegimeId															
+			 WHERE C.Id = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<select id="findCompanyByDocumentNumber" parameterType="map" resultMap="CompanyDTO_ResultMap">
+		<![CDATA[
+			SELECT C.Id
+			     , C.KindOfPerson 															
+			     , C.DocumentNumber														
+			     , C.SocialName															
+			     , C.FantasyName															
+			     , C.StateRegistration															
+			     , C.IsFreeFromStateRegistration															
+			     , C.MunicipalRegistration															
+			     , C.TaxRegimeId															
+			     , TR.Name TaxRegimeName
+			     , C.CNAE															
+			     , C.Sponsor															
+			     , C.OwnerId 															
+			     , C.Status															
+			     , C.LastUpdateDate															
+			     , C.IpAddress
+			     , C.MembershipDate															
+			  FROM [Company] C
+			 INNER JOIN [TaxRegime] TR ON TR.Id = C.TaxRegimeId															
+			 WHERE C.DocumentNumber = #{PARAM_COMPANY_DOCUMENT_NUMBER}
+		]]>
+	</select>
+	
+	<insert id="insertCompany"  parameterType="CompanyDTO" >
+  		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  			SELECT @@IDENTITY as id
+		</selectKey>
+		<![CDATA[
+			INSERT INTO Company (KindOfPerson, DocumentNumber, SocialName, FantasyName, 
+								 StateRegistration, IsFreeFromStateRegistration, MunicipalRegistration, 
+								 TaxRegimeId, CNAE, Sponsor, OwnerId, Status, LastUpdateDate, IpAddress)																																																							
+			             VALUES ( #{kindOfPerson,					jdbcType=VARCHAR}																																																							
+			                    , #{documentNumber,					jdbcType=NUMERIC}																																																							
+			                    , #{socialName,						jdbcType=VARCHAR}																																																							
+			                    , #{fantasyName,					jdbcType=VARCHAR}																																																							
+			                    , #{stateRegistration,				jdbcType=NUMERIC}																																																							
+			                    , #{isFreeFromStateRegistration,	jdbcType=BIT}																																																							
+			                    , #{municipalRegistration,			jdbcType=NUMERIC}
+			                    , #{taxRegime.id,					jdbcType=NUMERIC}
+			                    , #{cnae,							jdbcType=NUMERIC}
+			                    , #{sponsor,						jdbcType=VARCHAR}
+			                    , #{ownerId,						jdbcType=INTEGER}
+			                    , #{status,							jdbcType=VARCHAR}
+			                    , GETDATE()
+			                    , #{ipAddress,						jdbcType=VARCHAR} )																																																							
+		]]>
+	</insert>
+	
+	<update id="updateCompany"  parameterType="CompanyDTO" >
+		<![CDATA[
+			UPDATE Company 
+			   SET KindOfPerson 		 		= #{kindOfPerson,					jdbcType=VARCHAR}
+		     	 , DocumentNumber 			 	= #{documentNumber,					jdbcType=NUMERIC}
+			     , SocialName 			 		= #{socialName,						jdbcType=VARCHAR}	
+			     , FantasyName 			 		= #{fantasyName,					jdbcType=VARCHAR}
+			     , StateRegistration 	 		= #{stateRegistration,				jdbcType=NUMERIC}
+			     , IsFreeFromStateRegistration 	= #{isFreeFromStateRegistration,	jdbcType=BIT}
+			     , MunicipalRegistration 		= #{municipalRegistration,			jdbcType=NUMERIC}
+			     , TaxRegimeId 			 		= #{taxRegime.id,					jdbcType=NUMERIC}
+			     , CNAE 				 		= #{cnae,							jdbcType=NUMERIC}
+			     , Sponsor 				 		= #{sponsor,						jdbcType=VARCHAR}
+			     , OwnerId 				 		= #{ownerId,						jdbcType=INTEGER}
+			     , Status 				 		= #{status,							jdbcType=VARCHAR}
+		     	 , LastUpdateDate 				= GETDATE()
+			     , IpAddress 			 		= #{ipAddress,						jdbcType=VARCHAR}
+			 WHERE Id = #{id, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<select id="listCompanyAddress" parameterType="map" resultMap="CompanyAddressDTO_ResultMap">
+		<![CDATA[
+			SELECT C.Id
+			     , C.CompanyId 															
+			     , C.Description														
+			     , C.PostalCode														
+			     , C.StreetName															
+			     , C.Number															
+			     , C.District															
+			     , C.Complement															
+			     , C.City															
+			     , C.State															
+			  FROM [CompanyAddress] C
+			 WHERE C.CompanyId = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<insert id="insertCompanyAddress"  parameterType="CompanyAddressDTO" >
+  		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  			SELECT @@IDENTITY as id
+		</selectKey>
+		<![CDATA[
+			INSERT INTO CompanyAddress (CompanyId, Description, PostalCode, StreetName, Number, District, Complement, City, State)																																																							
+			             		VALUES ( #{companyId,		jdbcType=NUMERIC}																																																							
+			                    	   , #{description,		jdbcType=VARCHAR}																																																							
+			                    	   , #{postalCode,		jdbcType=NUMERIC}																																																							
+			                    	   , #{streetName,		jdbcType=VARCHAR}
+			                    	   , #{number,			jdbcType=VARCHAR}
+			                    	   , #{district,		jdbcType=VARCHAR}
+			                    	   , #{complement,		jdbcType=VARCHAR}
+			                    	   , #{city,			jdbcType=VARCHAR}
+			                    	   , #{state,			jdbcType=VARCHAR} )																																																							
+		]]>
+	</insert>
+	
+	<update id="updateCompanyAddress" parameterType="CompanyAddressDTO" >
+		<![CDATA[
+			UPDATE CompanyAddress 
+			   SET Description		= #{description,	jdbcType=VARCHAR}	
+			     , PostalCode	 	= #{postalCode,		jdbcType=NUMERIC}
+			     , StreetName		= #{streetName,		jdbcType=VARCHAR}
+			     , number			= #{number,			jdbcType=VARCHAR}
+			     , district			= #{district,		jdbcType=VARCHAR}
+			     , complement		= #{complement,		jdbcType=VARCHAR}
+			     , city				= #{city,			jdbcType=VARCHAR}
+			     , state			= #{state,			jdbcType=VARCHAR}
+			 WHERE Id = #{id, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<delete id="deleteCompanyAddress" parameterType="map" >
+		<![CDATA[
+			DELETE FROM CompanyAddress 
+			 WHERE Id = #{PARAM_ID}																																																							
+		]]>
+	</delete>
+
+	<select id="listCompanyContact" parameterType="map" resultMap="CompanyContactDTO_ResultMap">
+		<![CDATA[
+			SELECT C.Id
+			     , C.CompanyId 															
+			     , C.Name														
+			     , C.Mail														
+			     , C.PhoneNumber															
+			     , C.MobileNumber														
+			  FROM [CompanyContact] C
+			 WHERE C.CompanyId = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<insert id="insertCompanyContact"  parameterType="CompanyContactDTO" >
+  		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  			SELECT @@IDENTITY as id
+		</selectKey>
+		<![CDATA[
+			INSERT INTO CompanyContact (CompanyId, Name, Mail, PhoneNumber, MobileNumber)																																																							
+			             		VALUES ( #{companyId,		jdbcType=NUMERIC}																																																							
+			                    	   , #{name,			jdbcType=VARCHAR}																																																							
+			                    	   , #{mail,			jdbcType=VARCHAR}
+			                    	   , #{phoneNumber,		jdbcType=NUMERIC}																																																							
+			                    	   , #{mobileNumber,	jdbcType=NUMERIC} )																																																							
+		]]>
+	</insert>
+	
+	<update id="updateCompanyContact" parameterType="CompanyContactDTO" >
+		<![CDATA[
+			UPDATE CompanyContact 
+			   SET Name			= #{name,			jdbcType=VARCHAR}	
+			     , Mail			= #{mail,			jdbcType=VARCHAR}
+			     , PhoneNumber	= #{phoneNumber,	jdbcType=NUMERIC}
+			     , MobileNumber	= #{mobileNumber,	jdbcType=NUMERIC}
+			 WHERE Id = #{id, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<delete id="deleteCompanyContact" parameterType="map" >
+		<![CDATA[
+			DELETE FROM CompanyContact 
+			 WHERE Id = #{PARAM_ID}																																																							
+		]]>
+	</delete>
+
+	<select id="findCompanyAccountancy" parameterType="map" resultMap="CompanyAccountancyDTO_ResultMap">
+		<![CDATA[
+			SELECT C.CompanyId
+			     , C.Name															
+			     , C.DocumentNumber														
+			     , C.Sponsor															
+			     , C.PhoneNumber															
+			     , C.Mail														
+			  FROM [CompanyAccountancy] C
+			 WHERE C.CompanyId = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<insert id="insertCompanyAccountancy"  parameterType="CompanyAccountancyDTO" >
+		<![CDATA[
+			INSERT INTO CompanyAccountancy (CompanyId, Name, DocumentNumber, Sponsor, PhoneNumber, Mail)																																																							
+			             		    VALUES ( #{companyId,		jdbcType=NUMERIC}																																																							
+			                    	       , #{name,			jdbcType=VARCHAR}																																																							
+			                    	       , #{documentNumber,	jdbcType=NUMERIC}
+			                    	       , #{sponsor,			jdbcType=VARCHAR}
+			                    	       , #{phoneNumber,		jdbcType=NUMERIC}																																																							
+			                    	       , #{mail,			jdbcType=VARCHAR} )																																																							
+		]]>
+	</insert>
+	
+	<update id="updateCompanyAccountancy" parameterType="CompanyAccountancyDTO" >
+		<![CDATA[
+			UPDATE CompanyAccountancy
+			   SET Name				= #{name,			jdbcType=VARCHAR}	
+			     , DocumentNumber 	= #{documentNumber,	jdbcType=NUMERIC}
+			     , Sponsor			= #{sponsor,		jdbcType=VARCHAR}
+			     , PhoneNumber		= #{phoneNumber,	jdbcType=NUMERIC}
+			     , Mail				= #{mail,			jdbcType=VARCHAR}
+			 WHERE CompanyId = #{companyId, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<select id="findCompanyQuestionaire" parameterType="map" resultMap="CompanyQuestionaireDTO_ResultMap">
+		<![CDATA[
+			SELECT Q.CompanyId
+			     , Q.SizeId			
+			     , SZ.Name AS SizeName												
+			     , SZ.Description AS SizeDescription												
+			     , Q.EmployeeId														
+			     , EM.Name AS EmployeeName												
+			     , EM.Description AS EmployeeDescription												
+			     , Q.SellId															
+			     , SE.Name AS SellName												
+			     , SE.Description AS SellDescription												
+			     , Q.BusinessId															
+			     , BU.Name AS BusinessName												
+			     , BU.Description AS BusinessDescription												
+			     , Q.HasIssuedInvoices														
+			  FROM [CompanyQuestionaire] Q
+			  LEFT JOIN [CompanySize] SZ ON SZ.Id = Q.SizeId  
+			  LEFT JOIN [CompanyEmployee] EM ON EM.Id = Q.EmployeeId  
+			  LEFT JOIN [CompanySell] SE ON SE.Id = Q.SellId  
+			  LEFT JOIN [CompanyBusiness] BU ON BU.Id = Q.BusinessId  
+			 WHERE Q.CompanyId = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<insert id="insertCompanyQuestionaire"  parameterType="CompanyQuestionaireDTO" >
+		<![CDATA[
+			INSERT INTO CompanyQuestionaire (CompanyId, SizeId, EmployeeId, SellId, BusinessId, HasIssuedInvoices)																																																							
+			             		     VALUES ( #{companyId,			jdbcType=NUMERIC}																																																							
+			                    	        , #{size.id,			jdbcType=NUMERIC}
+			                    	        , #{employee.id,		jdbcType=NUMERIC}
+			                    	        , #{sell.id,			jdbcType=NUMERIC}
+			                    	        , #{business.id,		jdbcType=NUMERIC}
+			                    	        , #{hasIssuedInvoices,	jdbcType=NUMERIC} )																																																							
+		]]>
+	</insert>
+	
+	<update id="updateCompanyQuestionaire" parameterType="CompanyQuestionaireDTO" >
+		<![CDATA[
+			UPDATE CompanyQuestionaire
+			   SET SizeId    		 = #{size.id,			jdbcType=NUMERIC}
+			     , EmployeeId    	 = #{employee.id,		jdbcType=NUMERIC}
+			     , SellId    		 = #{sell.id,			jdbcType=NUMERIC}
+			     , BusinessId    	 = #{business.id,		jdbcType=NUMERIC}
+			     , HasIssuedInvoices = #{hasIssuedInvoices,	jdbcType=NUMERIC}
+			 WHERE CompanyId = #{companyId, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<select id="listCompanyQuestionaireIssues" parameterType="map" resultMap="CompanyIssueDTO_ResultMap">
+		<![CDATA[
+			SELECT Q.CompanyId 															
+			     , I.Id														
+			     , I.Name														
+			     , I.Description															
+			  FROM [CompanyQuestionaireIssue] Q
+			 INNER JOIN [CompanyIssue] I ON I.Id = Q.IssueId
+			 WHERE Q.CompanyId = #{PARAM_COMPANY_ID}
+		]]>
+	</select>
+
+	<delete id="deleteInvalidCompanyQuestionaireIssues" parameterType="map">
+		<![CDATA[
+			DELETE 
+			  FROM CompanyQuestionaireIssue																																																												
+			 WHERE CompanyId = #{PARAM_COMPANY_ID}																																																												
+			   AND IssueId IN ( SELECT IssueId																																																												
+			                      FROM CompanyQuestionaireIssue																																																												
+                                 WHERE CompanyId = #{PARAM_COMPANY_ID}																																																												
+                                   AND IssueId NOT IN ( 																																																												
+		]]>
+		<foreach item="item" index="index" collection="PARAM_COMPANY_ISSUES" separator=",">
+		    											#{item.id}
+		</foreach>
+		<![CDATA[
+                   							  		  ) 
+                              )
+		]]>
+	</delete>
+
+	<insert id="insertCompanyQuestionaireIssues"  parameterType="map">
+		<![CDATA[
+			INSERT INTO CompanyQuestionaireIssue (CompanyId, IssueId)																																										
+			SELECT #{PARAM_COMPANY_ID}, CI.Id																																										
+			  FROM CompanyIssue CI																																										
+			 WHERE CI.Id IN ( 
+		]]>
+		<foreach item="item" index="index" collection="PARAM_COMPANY_ISSUES" separator=",">
+								#{item.id}
+		</foreach>
+		<![CDATA[
+			 	         	)																																										
+			   AND CI.Id NOT IN ( SELECT IssueId 																																										
+			            			FROM CompanyQuestionaireIssue 																																										
+			                       WHERE CompanyId = #{PARAM_COMPANY_ID} )																																										
+		]]>
+	</insert>
+
+	<update id="finishCompanyMembership"  parameterType="CompanyDTO" >
+		<![CDATA[
+			UPDATE Company 
+			   SET Status 				 		= #{status,		jdbcType=VARCHAR}
+		     	 , MembershipDate				= GETDATE()
+			     , IpAddress 			 		= #{ipAddress,	jdbcType=VARCHAR}
+			 WHERE Id = #{id, jdbcType=NUMERIC}																																																							
+		]]>
+	</update>
+
+	<resultMap id="CompanyDTO_ResultMap" type="CompanyDTO">
+		<id property="id" column="Id" />
+		<result property="kindOfPerson" column="KindOfPerson" />
+		<result property="documentNumber" column="DocumentNumber" />
+		<result property="stateRegistration" column="StateRegistration" />
+		<result property="isFreeFromStateRegistration" column="IsFreeFromStateRegistration" />
+		<result property="socialName" column="SocialName" />
+		<result property="fantasyName" column="FantasyName" />
+		<result property="municipalRegistration" column="MunicipalRegistration" />
+		<result property="taxRegime.id" column="TaxRegimeId" />
+		<result property="taxRegime.name" column="TaxRegimeName" />
+		<result property="cnae" column="CNAE" />
+		<result property="sponsor" column="Sponsor" />
+		<result property="ownerId" column="OwnerId" />
+		<result property="status" column="Status" />
+		<result property="lastUpdateDate" column="LastUpdateDate" />
+		<result property="ipAddress" column="IpAddress" />
+		<result property="membershipDate" column="MembershipDate" />
+	</resultMap>
+
+	<resultMap id="CompanyAddressDTO_ResultMap" type="CompanyAddressDTO">
+		<id property="id" column="Id" />
+		<result property="companyId" column="CompanyId" />
+		<result property="description" column="Description" />
+		<result property="postalCode" column="PostalCode" />
+		<result property="streetName" column="StreetName" />
+		<result property="number" column="Number" />
+		<result property="district" column="District" />
+		<result property="complement" column="Complement" />
+		<result property="city" column="City" />
+		<result property="state" column="State" />
+	</resultMap>
+
+	<resultMap id="CompanyContactDTO_ResultMap" type="CompanyContactDTO">
+		<id property="id" column="Id" />
+		<result property="companyId" column="CompanyId" />
+		<result property="name" column="Name" />
+		<result property="mail" column="Mail" />
+		<result property="phoneNumber" column="PhoneNumber" />
+		<result property="mobileNumber" column="MobileNumber" />
+	</resultMap>
+
+	<resultMap id="CompanyAccountancyDTO_ResultMap" type="CompanyAccountancyDTO">
+		<id property="companyId" column="CompanyId" />
+		<result property="name" column="Name" />
+		<result property="documentNumber" column="DocumentNumber" />
+		<result property="sponsor" column="Sponsor" />
+		<result property="phoneNumber" column="PhoneNumber" />
+		<result property="mail" column="Mail" />
+	</resultMap>
+
+	<resultMap id="CompanyQuestionaireDTO_ResultMap" type="CompanyQuestionaireDTO">
+		<id property="companyId" column="CompanyId" />
+	  	<result property="size.id" column="SizeId" />
+	  	<result property="size.name" column="SizeName" />
+	  	<result property="size.description" column="SizeDescription" />
+	  	<result property="employee.id" column="EmployeeId" />
+	  	<result property="employee.name" column="EmployeeName" />
+	  	<result property="employee.description" column="EmployeeDescription" />
+	  	<result property="sell.id" column="SellId" />
+	  	<result property="sell.name" column="SellName" />
+	  	<result property="sell.description" column="SellDescription" />
+	  	<result property="business.id" column="BusinessId" />
+	  	<result property="business.name" column="BusinessName" />
+	  	<result property="business.description" column="BusinessDescription" />
+		<result property="hasIssuedInvoices" column="HasIssuedInvoices" />
+	</resultMap>
+
+	<resultMap id="CompanyIssueDTO_ResultMap" type="CompanyIssueDTO">
+	  	<result property="id" column="Id" />
+	  	<result property="name" column="Name" />
+	  	<result property="description" column="Description" />
+	</resultMap>
+
+</mapper>

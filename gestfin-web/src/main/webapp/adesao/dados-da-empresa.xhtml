@@ -1,0 +1,226 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/#{msCompanyDataView.pageTemplate}.xhtml">
+            <ui:param name="templateBean" value="#{msCompanyDataView}" />
+            <ui:define name="content">
+			    <h:panelGroup id="pnlCompanyData" styleClass="body-contents" layout="block">
+			        <h:form id="formCompanyData" prependId="false"
+		        		onkeypress="if (event.keyCode == 13) { $('#btnNext').trigger('click'); return false; }">
+						<script type="text/javascript">
+							var hasError = #{msCompanyDataView.hasError};
+						    function checkError(data){
+					           	if(data.status == 'success'){
+						        	if (hasError) {
+						           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+							        }
+					           	}
+							}
+						</script>
+			        	<!-- Mensagens de erro e informação -->
+			            <h:panelGroup styleClass="form-messages" id="msgError" layout="block">
+			            	<h:messages id="messages-id" errorClass="err" infoClass="info" warnClass="warn"/>
+			            </h:panelGroup>		        
+			            <div class="panel panel-default">
+			                <!-- Título do passo da avaliação (tablet e desktop) -->
+			                <div class="panel-heading hidden-xs">
+			                    <div class="header-simple">
+			                        <span data-index="1">
+			                        	<h:outputText rendered="#{pageNavigationBean.loggedUser eq null}"
+			                        		value="#{i18n['membership.company_data.title']}" />
+		                        		<h:outputText rendered="#{pageNavigationBean.loggedUser ne null}"
+			                        		value="#{i18n['membership.company_data.title.logged']}" /></span>
+			                    </div>
+			                </div>
+			                <div class="panel-body no-padding">
+			                    <div class="container-fluid no-padding">
+			                        <div class="row-fluid">
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.kindofperson.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:selectOneMenu id="kind-of-person" value="#{msCompanyDataView.kindOfPerson}">
+												<f:selectItem itemLabel="#{i18n['membership.company_data.kindofperson.placeholder']}"/>
+												<f:selectItems 
+													value="#{msCompanyDataView.kindsOfPerson}" 
+													var="item" 
+													itemValue="#{item.value}" 
+													itemLabel="#{i18n[item.description]}"/>
+											</h:selectOneMenu>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                        
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.documentnumber.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.documentnumber.placeholder']}" 
+												value="#{msCompanyDataView.documentNumber}" 
+												styleClass="cpf-cnpj-input" 
+												pt:maxlength="18"
+												converter="customCpfCnpjConverter">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.socialname.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.socialname.placeholder']}" 
+												value="#{msCompanyDataView.socialName}" 
+												styleClass="text-input" 
+												pt:maxlength="100">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.fantasyname.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.fantasyname.placeholder']}" 
+												value="#{msCompanyDataView.fantasyName}" 
+												styleClass="text-input" 
+												pt:maxlength="100">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.stateregistration.label']}" />
+			                            </div>
+			                            <div class="col-xs-6 col-sm-2 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.stateregistration.placeholder']}" 
+												value="#{msCompanyDataView.stateRegistration}" 
+												styleClass="numeric-input"
+												pt:maxlength="15">
+											</h:inputText>
+			                            </div>
+										<div class="col-xs-4 col-sm-1 title-padding-12">
+											<h:outputLabel styleClass="field-label"
+												value="#{i18n['membership.company_data.free.label']}" />
+										</div>
+										<div class="col-xs-2 col-sm-1 field-padding-12">
+											<my:checkBox name="check-edit"
+												value="#{msCompanyDataView.freeFromStateRegistration}" />
+										</div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.municipalregistration.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.municipalregistration.placeholder']}" 
+												value="#{msCompanyDataView.municipalRegistration}" 
+												styleClass="numeric-input"
+												pt:maxlength="15">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.taxregime.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:selectOneMenu id="tax-regime" value="#{msCompanyDataView.taxRegimeId}">
+												<f:selectItem itemLabel="#{i18n['membership.company_data.taxregime.placeholder']}"/>
+												<f:selectItems 
+													value="#{msCompanyDataView.listTaxRegime}"  
+													var="item" 
+													itemValue="#{item.id}" 
+													itemLabel="#{item.name}"/>
+											</h:selectOneMenu>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.cnae.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.cnae.placeholder']}" 
+												value="#{msCompanyDataView.cnae}" 
+												styleClass="cnae-input"
+												pt:maxlength="9"
+												converter="customCnaeConverter">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.sponsor.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+											<h:inputText pt:type="tel"  
+												pt:placeholder="#{i18n['membership.company_data.sponsor.placeholder']}" 
+												value="#{msCompanyDataView.sponsor}" 
+												styleClass="text-input"
+												pt:maxlength="100">
+											</h:inputText>
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                            <div class="col-sm-6 hidden-xs"></div>
+													                        
+			                            <!-- Botões inferiores -->
+										<div class="col-xs-12 col-sm-12 bottom-border"></div>
+										<ui:fragment rendered="#{pageNavigationBean.loggedUser eq null or pageNavigationBean.userLoggedOwnerCompanyId eq null}">
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn normal-button" id="btnBack"
+				                                	value="#{i18n['btn.back']}" action="#{msCompanyDataView.actionBack}">
+				                                	<f:ajax execute="@form" event="action" render="@form" />
+				                                </h:commandButton>
+				                            </div>
+				                            <div class="col-xs-2 col-sm-8"></div>
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn default-button" id="btnNext" 
+				                                	value="#{i18n['btn.next']}" action="#{msCompanyDataView.actionNext}">
+				                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+				                                </h:commandButton>
+				                            </div>
+										</ui:fragment>
+										<ui:fragment rendered="#{pageNavigationBean.loggedUser ne null and pageNavigationBean.userLoggedOwnerCompanyId ne null}">
+				                            <div class="col-xs-7 col-sm-10"></div>
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn default-button" id="btnSave" 
+				                                	value="#{i18n['btn.save']}" action="#{msCompanyDataView.actionSave}">
+				                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+				                                </h:commandButton>
+				                            </div>
+										</ui:fragment>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				        <script>
+					        //-- Formatação
+					        applyCpfCnpjMask('.cpf-cnpj-input');
+					        applyNumericMask('.numeric-input');
+				        	applyCnaeMask('.cnae-input');				        
+					        applyAndroidMaxLength('.text-input');
+				        </script>
+			        </h:form>
+			    </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+	</h:body>
+</html>

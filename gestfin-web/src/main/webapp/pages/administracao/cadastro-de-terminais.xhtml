@@ -1,0 +1,208 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="title">#{i18n['terminal_maintain.label.header.title']}</ui:define>
+	<ui:define name="content">
+		<!-- Menu superior (tablet e desktop) ou menu lateral (smartphone) -->
+		<h:panelGroup id="pnlTerminalRegister" styleClass="body-contents"
+			layout="block">
+			<h:form id="formTerminalRegister" prependId="false">
+				<script type="text/javascript">
+						var hasError;
+						function openNewModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-terminal-add').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.new-button'); 		           	
+				           	}
+						}
+						function openEditModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-terminal-edit').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.edit-label-icon'); 		           	
+				           	}
+						}
+						function openDeleteModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-terminal-delete').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.delete-label-icon'); 		           	
+				           	}
+						}
+					</script>
+				<!-- Mensagens de erro e informação -->
+				<h:panelGroup styleClass="form-messages" id="messageGlobal">
+					<h:messages id="message-maintain-terminalid" errorClass="err"
+						infoClass="info" warnClass="warn" globalOnly="true" />
+				</h:panelGroup>
+				<div class="panel panel-default">
+					<!-- Título -->
+					<div class="panel-heading">
+						<div class="header-simple">
+							<span>#{i18n['terminal.record.title.label']}</span>
+						</div>
+					</div>
+					<div class="panel-body no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-10 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:inputText pt:type="text" maxlength="50"
+												pt:placeholder="#{i18n['terminal_maintain.input.terminal.number.placeholder']}"
+												value="#{terminalRegisterView.selectedTerminalNumber}" />
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:inputText pt:type="text" maxlength="50"
+												pt:placeholder="#{i18n['terminal_maintain.input.description.placeholder']}"
+												value="#{terminalRegisterView.selectedDescription}" />
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchOperator"
+												value="#{terminalRegisterView.selectedOperator}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['terminal_maintain.input.operator.placeholder']}" />
+												<f:selectItems value="#{terminalRegisterView.listOperators}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchEstablishment"
+												value="#{terminalRegisterView.selectedEstablishment}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['terminal_maintain.input.establishment.placeholder']}" />
+												<f:selectItems value="#{terminalRegisterView.listEstablishments}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-2 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="search-button"
+												value="#{i18n['appraisal.btn.search']}">
+												<f:ajax event="action"
+													listener="#{terminalRegisterView.actionSearchTerminals}"
+													execute="@form" render="@form pnlList messageGlobal" />
+											</h:commandLink>
+										</div>
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="new-button"
+												value="#{i18n['appraisal.btn.new']}"
+												onclick="disableControl('.new-button');">
+												<f:ajax event="action"
+													listener="#{terminalRegisterView.actionBeforeNewTerminalListener}"
+													execute="@this" onevent="openNewModal"
+													render="popup-dados-terminal-add formNewTerminal" />
+											</h:commandLink>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h:panelGroup id="pnlList" layout="block">
+								<h:panelGroup styleClass="row-fluid" id="div-resultado"
+									rendered="#{terminalRegisterView.listSelectedTerminals.size() gt 0}">
+
+									<!-- Indicador de quantidade retornada -->
+									<h:panelGroup id="pageViewID"
+										styleClass="col-xs-12 col-sm-12 data-table-info">
+										<label class="field-contents-bold" id="search-info">#{terminalRegisterView.youAreSeeing}</label>
+									</h:panelGroup>
+									<!-- Resultado -->
+									<div class="col-xs-12 col-sm-12 table-responsive">
+										<h:dataTable id="dataTableTerminal"
+											value="#{terminalRegisterView.listSelectedTerminals}" var="item"
+											styleClass="no-padding table table-striped data-table"
+											rows="#{terminalRegisterView.numberLines}">
+
+											<h:column pt:class="text-center">
+												<!-- column header -->
+												<f:facet name="header">#{i18n['terminal_maintain.label.terminal.number']}</f:facet>
+												<!-- row record -->
+												<h:outputText value="#{item.terminalNumber}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.description']}</f:facet>
+												<h:outputText value="#{item.description}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.operator']}</f:facet>
+												<h:outputText
+													value="#{item.operator.name}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.establishment']}</f:facet>
+												<h:outputText
+													value="#{item.establishment.name}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.active']}</f:facet>
+												<h:outputText
+													value="#{terminalRegisterView.getMessageBundle(item.isActiveBundle)}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.last_update']}</f:facet>
+												<h:outputText value="#{item.lastUpdateDate}">
+													<f:convertDateTime pattern="#{i18n['date_time.format.pattern']}" 
+														locale="#{i18n['date_time.format.locale']}"
+														timeZone="#{i18n['date_time.format.timezone']}" />
+												</h:outputText>
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['terminal_maintain.label.responsable']}</f:facet>
+												<h:outputText value="#{item.lastUpdatedByUser}" />
+											</h:column>
+
+											<h:column pt:class="actions">
+												<h:commandLink styleClass="edit-label-icon"
+													onclick="disableControl('.edit-label-icon');">
+													<h:outputLabel
+														pt:title="#{i18n['terminal_maintain.label.edit']}" />
+													<f:ajax event="action"
+														listener="#{terminalRegisterView.loadEditForm(item)}"
+														execute="@this" onevent="openEditModal"
+														render="popup-dados-terminal-edit formEdit" />
+												</h:commandLink>
+												<h:commandLink styleClass="delete-label-icon"
+													onclick="disableControl('.delete-label-icon');">
+													<h:outputLabel
+														pt:title="#{i18n['terminal_maintain.label.delete']}" />
+													<f:ajax event="action"
+														listener="#{terminalRegisterView.loadEditForm(item)}"
+														execute="@this" onevent="openDeleteModal"
+														render="popup-dados-terminal-delete formDeleteTerminal" />
+												</h:commandLink>
+											</h:column>
+										</h:dataTable>
+									</div>
+
+									<!-- Botões inferiores -->
+									<div class="col-xs-12 col-sm-12 bottom-border"></div>
+									<h:panelGroup id="panelShowMore"
+										styleClass="col-xs-12 col-sm-4 col-sm-push-4 button-padding">
+										<h:commandButton styleClass="btn normal-button"
+											action="#{terminalRegisterView.addMoreLines}"
+											rendered="#{terminalRegisterView.numberLines lt terminalRegisterView.listSelectedTerminals.size()}"
+											id="mostrar-mais"
+											value="#{i18n['terminal_maintain.label.show_more']}">
+											<f:ajax event="action" execute="@this"
+												render="dataTableTerminal pageViewID panelShowMore" />
+										</h:commandButton>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<ui:include src="/pages/administracao/modal-dados-terminais.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,179 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/#{msCompanyContactView.pageTemplate}.xhtml">
+            <ui:param name="templateBean" value="#{msCompanyContactView}" />
+            <ui:define name="content">
+			    <h:panelGroup id="pnlCompanyContact" styleClass="body-contents" layout="block">
+			        <h:form id="formCompanyContact" prependId="false"
+		        		onkeypress="if (event.keyCode == 13) { $('#btnNext').trigger('click'); return false; }">
+						<script type="text/javascript">
+							var hasError = #{msCompanyContactView.hasError};
+						    function checkError(data){
+					           	if(data.status == 'success'){
+						        	if (hasError) {
+						           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+							        }
+					           	}
+							}
+							function openNewModal(data) {
+					           	if(data.status == 'success'){
+									$('#popup-dados-contato-add').modal({backdrop: 'static', keyboard: false});
+					           		enableControl('.new-button'); 		           	
+					           	}
+							}
+							function openEditModal(data) {
+					           	if(data.status == 'success'){
+									$('#popup-dados-contato-edit').modal({backdrop: 'static', keyboard: false});
+					           		enableControl('.edit-label-icon'); 		           	
+					           	}
+							}
+							function openDeleteModal(data) {
+					           	if(data.status == 'success'){
+									$('#popup-dados-contato-delete').modal({backdrop: 'static', keyboard: false});
+					           		enableControl('.delete-label-icon'); 		           	
+					           	}
+							}
+						</script>
+			        	<!-- Mensagens de erro e informação -->
+			            <h:panelGroup styleClass="form-messages" id="msgError" layout="block">
+			            	<h:messages id="messages-id" errorClass="err" infoClass="info" warnClass="warn"/>
+			            </h:panelGroup>		        
+			            <div class="panel panel-default">
+			                <!-- Título do passo da avaliação (tablet e desktop) -->
+			                <div class="panel-heading hidden-xs">
+			                    <div class="header-simple">
+			                        <span data-index="1">
+			                        	<h:outputText rendered="#{pageNavigationBean.loggedUser eq null}"
+			                        		value="#{i18n['membership.company_contact.title']}" />
+		                        		<h:outputText rendered="#{pageNavigationBean.loggedUser ne null}"
+			                        		value="#{i18n['membership.company_contact.title.logged']}" /></span>
+			                    </div>
+			                </div>
+			                <div class="panel-body no-padding">
+			                    <div class="container-fluid no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-sm-8 hidden-xs"></div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:commandLink styleClass="new-button"
+												value="#{i18n['membership.company_contact.add_contact']}"
+												onclick="disableControl('.new-button');">
+												<f:ajax event="action"
+													listener="#{msCompanyContactView.actionBeforeNewContact}"
+													execute="@this" onevent="openNewModal"
+													render="popup-dados-contato-add formAdd" />
+											</h:commandLink>
+										</div>
+									</div>
+									<h:panelGroup id="pnlList" layout="block">
+										<h:panelGroup styleClass="row-fluid"
+											rendered="#{msCompanyContactView.listContacts.size() eq 0}">
+											<!-- Sem registros -->
+											<h:panelGroup
+												styleClass="col-xs-12 col-sm-12 data-table-info">
+												<label class="field-contents-bold">#{i18n['membership.company_contact.no_records_found']}</label>
+											</h:panelGroup>
+										</h:panelGroup>									
+										<h:panelGroup styleClass="row-fluid" id="div-resultado"
+											rendered="#{msCompanyContactView.listContacts.size() gt 0}">
+		
+											<!-- Indicador de quantidade retornada -->
+											<h:panelGroup id="pageViewID"
+												styleClass="col-xs-12 col-sm-12 data-table-info">
+												<label class="field-contents-bold" id="search-info">#{msCompanyContactView.youAreSeeing}</label>
+											</h:panelGroup>
+											<!-- Resultado -->
+											<div class="col-xs-12 col-sm-12 table-responsive">
+												<h:dataTable id="dataTableContacts"
+													value="#{msCompanyContactView.listContacts}" var="item"
+													styleClass="no-padding table table-striped data-table">
+		
+													<h:column pt:class="text-center">
+														<!-- column header -->
+														<f:facet name="header">#{i18n['membership.company_contact.name.label']}</f:facet>
+														<!-- row record -->
+														<h:outputText value="#{item.name}" />
+													</h:column>
+													<h:column pt:class="text-center">
+														<f:facet name="header">#{i18n['membership.company_contact.mail.label']}</f:facet>
+														<h:outputText value="#{item.mail}" />
+													</h:column>
+													<h:column pt:class="text-center">
+														<f:facet name="header">#{i18n['membership.company_contact.phone_number.label']}</f:facet>
+														<h:outputText 
+															value="#{item.phoneNumber}"
+															converter="customPhoneConverter" />
+													</h:column>
+													<h:column pt:class="text-center">
+														<f:facet name="header">#{i18n['membership.company_contact.mobile_number.label']}</f:facet>
+														<h:outputText 
+															value="#{item.mobileNumber}"
+															converter="customPhoneConverter" />
+													</h:column>
+		
+													<h:column pt:class="actions">
+														<h:commandLink styleClass="edit-label-icon"
+															onclick="disableControl('.edit-label-icon');">
+															<h:outputLabel
+																pt:title="#{i18n['btn.edit']}" />
+															<f:ajax event="action"
+																listener="#{msCompanyContactView.actionBeforeEditContact(item)}"
+																execute="@this" onevent="openEditModal"
+																render="popup-dados-contato-edit formEdit" />
+														</h:commandLink>
+														<h:commandLink styleClass="delete-label-icon"
+															onclick="disableControl('.delete-label-icon');">
+															<h:outputLabel
+																pt:title="#{i18n['btn.delete']}" />
+															<f:ajax event="action"
+																listener="#{msCompanyContactView.actionBeforeDeleteContact(item)}"
+																execute="@this" onevent="openDeleteModal"
+																render="popup-dados-endereco-delete formDelete" />
+														</h:commandLink>
+													</h:column>
+												</h:dataTable>
+											</div>
+										</h:panelGroup>
+									</h:panelGroup>
+			                    
+			                        <div class="row-fluid">
+			                        	<div class="col-xs-12">
+			                        		<p></p>
+			                        	</div>
+													                        
+			                            <!-- Botões inferiores -->
+										<div class="col-xs-12 col-sm-12 bottom-border"></div>
+										<ui:fragment rendered="#{pageNavigationBean.loggedUser eq null or pageNavigationBean.userLoggedOwnerCompanyId eq null}">
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn normal-button" id="btnBack"
+				                                	value="#{i18n['btn.back']}" action="#{msCompanyContactView.actionBack}">
+				                                	<f:ajax execute="@form" event="action" render="@form" />
+				                                </h:commandButton>
+				                            </div>
+				                            <div class="col-xs-2 col-sm-8"></div>
+				                            <div class="col-xs-5 col-sm-2 button-padding">
+				                                <h:commandButton styleClass="btn default-button" id="btnNext" 
+				                                	value="#{i18n['btn.next']}" action="#{msCompanyContactView.actionNext}">
+				                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+				                                </h:commandButton>
+				                            </div>
+			                            </ui:fragment>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				        <script>
+				        
+				        </script>
+			        </h:form>
+			    </h:panelGroup>
+				<ui:include src="/adesao/modal-contato-empresa.xhtml" />
+				<ui:include src="/adesao/modal-contato-empresa-delete.xhtml" />
+            </ui:define>
+        </ui:composition>
+	</h:body>
+</html>

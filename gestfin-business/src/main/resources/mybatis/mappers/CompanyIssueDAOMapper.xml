@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CompanyIssueDAO">
+
+	<select id="listAll" parameterType="map" resultMap="CompanyIssueDTO_ResultMap">
+		<![CDATA[
+			SELECT Id
+			     , Name															
+			     , Description															
+			  FROM [CompanyIssue]															
+			 ORDER BY Id
+		]]>
+	</select>
+
+	<resultMap id="CompanyIssueDTO_ResultMap" type="CompanyIssueDTO">
+		<id property="id" column="Id" />
+		<result property="name" column="Name" />
+		<result property="description" column="Description" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,252 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+<h:body>
+	<script type="text/javascript">
+			var hasError;
+	        function closeNewModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-usuario-add').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeEditModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-usuario-edit').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+        </script>
+
+	<h:panelGroup id="popup-dados-usuario-edit" styleClass="modal fade"
+		pt:role="dialog" layout="block">
+		<h:form id="formEdit" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<!-- <button type="button" class="close" data-dismiss="modal">X</button> -->
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{userRegisterView.closeModal}"
+							value="X">
+							<f:ajax execute="@form" render="dialog-id messageGlobal" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['user_maintain.edit.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorEdit">
+							<h:messages id="message-maintain-edit-modal-userid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.name']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text"
+										pt:placeholder="#{i18n['user_maintain.edit.input.name.label']}"
+										value="#{userRegisterView.editName}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.email']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="email"
+										pt:placeholder="#{i18n['user_maintain.edit.input.name.email']}"
+										value="#{userRegisterView.editMail}" readonly="true" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['user_maintain.label.profile']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{userRegisterView.editProfile}">
+										<f:selectItem itemLabel="#{i18n['user.record.select.label']}" />
+										<f:selectItems value="#{userRegisterView.listProfiles}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.profileName}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.active']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<my:checkBox name="check-edit"
+										value="#{userRegisterView.editActive}" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{userRegisterView.closeModal}"
+										value="#{i18n['user_maintain.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{userRegisterView.actionEditSave}"
+											execute="@form"
+											render="@form pnlUserRegister messageGlobal formUserRegister"
+											onevent="closeEditModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+					hasError = #{userRegisterView.hasError};
+					$('.cpf-cnpj-input').mask(cpfCnpjBehavior, cpfCnpjOptions);
+				</script>
+		</h:form>
+	</h:panelGroup>
+
+	<h:panelGroup id="popup-dados-usuario-add" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formNewUser" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{userRegisterView.closeModal}"
+							value="X">
+							<f:ajax render="dialog-id" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['user_maintain.add.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorNewUser"
+							layout="block">
+							<h:messages id="message-maintain-add-modal-userid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.name']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text"
+										pt:placeholder="#{i18n['user_maintain.edit.input.name.label']}"
+										value="#{userRegisterView.editName}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.email']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="email"
+										pt:placeholder="#{i18n['user_maintain.edit.input.name.email']}"
+										value="#{userRegisterView.editMail}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['user_maintain.label.profile']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{userRegisterView.editProfile}">
+										<f:selectItem itemLabel="#{i18n['user.record.select.label']}" />
+										<f:selectItems value="#{userRegisterView.listProfiles}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.profileName}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['user_maintain.label.active']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<my:checkBox name="check-new"
+										value="#{userRegisterView.editActive}" disabled="true" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{userRegisterView.closeModal}"
+										value="#{i18n['user_maintain.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{userRegisterView.actionNewUser}"
+											execute="@form"
+											render="@form pnlUserRegister messageGlobal formUserRegister"
+											onevent="closeNewModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+					hasError = #{userRegisterView.hasError};
+ 				</script>
+		</h:form>
+	</h:panelGroup>
+	<script type="text/javascript">
+		</script>
+</h:body>
+</html>

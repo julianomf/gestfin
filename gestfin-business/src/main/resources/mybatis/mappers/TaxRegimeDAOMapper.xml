@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TaxRegimeDAO">
+
+	<select id="listAll" parameterType="map" resultMap="TaxRegimeDTO_ResultMap">
+		<![CDATA[
+			SELECT Id
+			     , Name															
+			  FROM [TaxRegime]															
+		]]>
+	</select>
+
+	<resultMap id="TaxRegimeDTO_ResultMap" type="TaxRegimeDTO">
+		<id property="id" column="Id" />
+		<result property="name" column="Name" />
+	</resultMap>
+
+</mapper>

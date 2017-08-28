@@ -1,0 +1,86 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/template-membership.xhtml">
+            <ui:param name="templateBean" value="#{msCompanyEmployeeView}" />
+            <ui:define name="content">
+			    <h:panelGroup id="pnlCompanyEmployee" styleClass="body-contents" layout="block">
+			        <h:form id="formCompanyEmployee" prependId="false"
+		        		onkeypress="if (event.keyCode == 13) { $('#btnNext').trigger('click'); return false; }">
+						<script type="text/javascript">
+							var hasError = #{msCompanyEmployeeView.hasError};
+						    function checkError(data){
+					           	if(data.status == 'success'){
+						        	if (hasError) {
+						           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+							        }
+					           	}
+							}
+						</script>
+			        	<!-- Mensagens de erro e informação -->
+			            <h:panelGroup styleClass="form-messages" id="msgError" layout="block">
+			            	<h:messages id="messages-id" errorClass="err" infoClass="info" warnClass="warn"/>
+			            </h:panelGroup>		        
+			            <div class="panel panel-default">
+			                <!-- Título do passo da avaliação (tablet e desktop) -->
+			                <div class="panel-heading hidden-xs">
+			                    <div class="header-simple">
+			                        <span><h:outputText value="#{i18n['membership.company_employee.title']}" /></span>
+			                    </div>
+			                </div>
+			                <div class="panel-body no-padding">
+			                    <div class="container-fluid no-padding">
+			                        <div class="row-fluid">
+			                        
+			                        	<div class="col-xs-12">
+			                        		<p></p>
+			                        	</div>
+			                        
+			                            <!-- -->
+			                            <div class="col-sm-1 hidden-xs"></div>
+			                            <div class="col-xs-12 col-sm-10">
+			                            	<my:buttonSetIcons
+			                            	    name="question-1" 
+			                            	    datasource="#{msCompanyEmployeeView.listEmployees}" 
+			                            	    value="#{msCompanyEmployeeView.selectedEmployeeId}"
+			                            	    breakbeforetitle="true" />
+			                            </div>
+			                            <div class="col-sm-1 hidden-xs"></div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                        	<div class="col-xs-12">
+			                        		<p></p>
+			                        	</div>
+
+			                            <!-- Botões inferiores -->
+										<div class="col-xs-12 col-sm-12 bottom-border"></div>
+			                            <div class="col-xs-5 col-sm-2 button-padding">
+			                                <h:commandButton styleClass="btn normal-button" id="btnBack"
+			                                	value="#{i18n['btn.back']}" action="#{msCompanyEmployeeView.actionBack}">
+			                                	<f:ajax execute="@form" event="action" render="@form" />
+			                                </h:commandButton>
+			                            </div>
+			                            <div class="col-xs-2 col-sm-8"></div>
+			                            <div class="col-xs-5 col-sm-2 button-padding">
+			                                <h:commandButton styleClass="btn default-button" id="btnNext" 
+			                                	value="#{i18n['btn.next']}" action="#{msCompanyEmployeeView.actionNext}">
+			                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+			                                </h:commandButton>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				        <script>
+				        
+				        </script>
+			        </h:form>
+			    </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+	</h:body>
+</html>

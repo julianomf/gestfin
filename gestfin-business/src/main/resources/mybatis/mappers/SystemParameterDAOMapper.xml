@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SystemParameterDAO">
+	<select id="findParameterStringValue" parameterType="map"
+		resultType="string">
+		<![CDATA[
+			SELECT StringValue																	
+  				FROM SystemParameter																	
+ 			WHERE ParameterName = #{PARAM_NAME}																	
+		]]>
+	</select>
+
+	<select id="findParameterIntValue" parameterType="map"
+		resultType="int">
+		<![CDATA[
+			SELECT CAST(NumericValue AS INT)																	
+  				FROM SystemParameter																	
+ 			WHERE ParameterName = #{PARAM_NAME}																	
+		]]>
+	</select>
+
+	<select id="findParameterFloatValue" parameterType="map"
+		resultType="float">
+		<![CDATA[
+			SELECT CAST(NumericValue AS FLOAT)																	
+  				FROM SystemParameter																	
+ 			WHERE ParameterName = #{PARAM_NAME}																	
+		]]>
+	</select>
+
+	<update id="updateParameterValue" parameterType="map">
+		<![CDATA[
+			UPDATE SystemParameter
+				SET StringValue = #{PARAM_VALUE}
+			WHERE
+				ParameterName = #{PARAM_NAME}
+		]]>
+	</update>
+
+	<update id="updateParameterIntValue" parameterType="map">
+		<![CDATA[
+			UPDATE SystemParameter
+				SET NumericValue = #{PARAM_VALUE}
+			WHERE
+				ParameterName = #{PARAM_NAME}
+		]]>
+	</update>
+</mapper>

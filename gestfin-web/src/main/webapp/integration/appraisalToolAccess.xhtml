@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+
+	<h:outputScript name="frameworks/jquery/jquery-2.2.3.min.js" />
+	<h:outputStylesheet
+		name="frameworks/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<h:outputScript name="frameworks/bootstrap/3.3.6/js/bootstrap.min.js" />
+	<h:outputScript name="frameworks/jquery-mask/jquery.mask.min.js" />
+	<h:outputStylesheet
+		name="frameworks/jquery-file-upload-master/css/jquery.fileupload.css" />
+
+	<h:outputScript
+		name="frameworks/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" />
+	<h:outputStylesheet
+		name="frameworks/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" />
+
+	<h:outputStylesheet name="stylesheets/nsol-gestfin-#{pageNavigationBean.cssVersion}.css" />
+	<h:outputScript name="javascripts/nsol-gestfin.js" />
+	<title><ui:insert name="title">#{i18n['app.title']}</ui:insert></title>
+</h:head>
+
+<f:event listener="#{appraisalToolAccessView.checkAccessToken}"
+	type="preRenderView" />
+
+<h:body>
+	<h:form prependId="false">
+		<h:panelGroup id="mainGroup">
+			<!-- Mensagens de erro e informação -->
+			<h:panelGroup styleClass="form-messages" id="messageGlobal">
+				<h:messages id="message-appraisal-tool-access-error"
+					errorClass="err" infoClass="info" warnClass="warn"
+					globalOnly="true" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</h:body>
+
+</html>

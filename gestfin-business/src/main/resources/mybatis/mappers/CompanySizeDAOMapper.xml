@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CompanySizeDAO">
+
+	<select id="listAll" parameterType="map" resultMap="CompanySizeDTO_ResultMap">
+		<![CDATA[
+			SELECT Id
+			     , Name															
+			     , Description															
+			     , IconType															
+			     , IconReference															
+			     , ButtonClass															
+			  FROM [CompanySize]															
+			 ORDER BY Id
+		]]>
+	</select>
+
+	<resultMap id="CompanySizeDTO_ResultMap" type="CompanySizeDTO">
+		<id property="id" column="Id" />
+		<result property="name" column="Name" />
+		<result property="description" column="Description" />
+		<result property="iconType" column="IconType" />
+		<result property="iconReference" column="IconReference" />
+		<result property="buttonClass" column="ButtonClass" />
+	</resultMap>
+
+</mapper>

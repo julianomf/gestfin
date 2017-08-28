@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+	<persistence-unit name="gestfin-business"
+		transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>jdbc/gestfinDS</jta-data-source>
+
+		<!-- Properties -->
+		<properties>
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
+			<property name="hibernate.transaction.manager_lookup_class"
+				value="${manager_lookup_class}" />
+			<!-- <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.WebSphereTransactionManagerLookup" 
+				/> -->
+
+			<!-- Profundidade máxima de fetch Estabelece a "profundidade" máxima para 
+				árvore de busca de união externa para associações finais únicas (um para 
+				um, muitos para um). Um 0 desativa por padrão a busca de união externa. eg. 
+				valores recomendados entre0 e 3 <property name="hibernate.max_fetch_depth" 
+				value="1" /> -->
+
+			<!-- Ordenação de updates Força o Hibernate a ordenar os updates SQL pelo 
+				valor da chave primária dos ítens a serem atualizados. Isto resultará em 
+				menos deadlocks nas transações em sistemas altamente concorrente. <property 
+				name="hibernate.order_updates" value="true" /> -->
+
+			<!-- Formatação do SQL gerado no log <property name="hibernate.format_sql" 
+				value="true" /> -->
+
+			<!-- Estatísticas do Hibernate <property name="hibernate.generate_statistics" 
+				value="true" /> -->
+
+			<!-- Geração das tabelas no Schema - CUIDADO!!!! validate: validate the 
+				schema, makes no changes to the database. update: update the schema. create: 
+				creates the schema, destroying previous data. create-drop: drop the schema 
+				at the end of the session. <property name="hibernate.hbm2ddl.auto" value="validate" 
+				/> -->
+		</properties>
+	</persistence-unit>
+
+</persistence>

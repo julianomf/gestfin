@@ -1,0 +1,407 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+<h:body>
+	<script type="text/javascript">
+			var hasError;
+	        function closeNewModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-endereco-add').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeEditModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-endereco-edit').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+        </script>
+
+	<h:panelGroup id="popup-dados-endereco-edit" styleClass="modal fade"
+		pt:role="dialog" layout="block">
+		<h:form id="formEdit" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">X</button>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['membership.company_address.edit.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorEdit">
+							<h:messages id="message-edit-modal-addressid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div id="divEdit" class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.description.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.description.placeholder']}"
+										pt:maxlength="50"
+										value="#{msCompanyAddressView.editDescription}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.postalcode.label']}" />
+								</div>
+								<div class="col-xs-6 col-sm-5 field-padding-12">
+									<h:inputText 
+										styleClass="postalcode-input"
+										pt:type="tel"
+										pt:placeholder="#{i18n['membership.company_address.postalcode.placeholder']}"
+										pt:maxlength="9"
+										value="#{msCompanyAddressView.editPostalCode}" 
+										converter="customPostalCodeConverter" />
+								</div>
+                                <div class="col-xs-6 col-sm-4 field-padding">
+	                                <h:commandLink styleClass="search-button" value="#{i18n['btn.search']}">
+	                                	<f:ajax event="action" listener="#{msCompanyAddressView.actionFindPostalCode}"  
+	                                		execute="@form" render="@form" />
+	                                </h:commandLink>
+                                </div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.streetname.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.streetname.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editStreetName}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-5 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.number.placeholder']}"
+										pt:maxlength="10"
+										value="#{msCompanyAddressView.editNumber}" />
+								</div>
+								<div class="hidden-xs col-sm-4 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.district.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.district.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editDistrict}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.complement.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.complement.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editComplement}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.city.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.city.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editCity}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.state.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-5 field-padding-12">
+									<h:selectOneMenu 
+										value="#{msCompanyAddressView.editState}">
+										<f:selectItem itemLabel="#{i18n['membership.company_address.state.placeholder']}" />
+										<f:selectItems value="#{msCompanyAddressView.listStates}"
+											var="item" itemValue="#{item.id}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-4 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton 
+										styleClass="btn normal-button" 
+										pt:type="button" 
+										value="#{i18n['btn.cancel']}"
+										onclick="$('#popup-dados-endereco-edit').modal('hide');" />
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{msCompanyAddressView.actionSaveEditAddress()}"
+											execute="@form"
+											render="@form pnlCompanyAddress messageGlobal formCompanyAddress"
+											onevent="closeEditModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{msCompanyAddressView.hasError};
+		        //-- Formatação
+		        applyPostalCodeMask('.postalcode-input');
+		        applyAndroidMaxLength('.text-input');
+			</script>
+		</h:form>
+	</h:panelGroup>
+
+	<h:panelGroup id="popup-dados-endereco-add" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formAdd" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">X</button>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['membership.company_address.add.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorNew"
+							layout="block">
+							<h:messages id="message-add-modal-addressid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div id="divNew" class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.description.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.description.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editDescription}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.postalcode.label']}" />
+								</div>
+								<div class="col-xs-6 col-sm-5 field-padding-12">
+									<h:inputText 
+										styleClass="postalcode-input"
+										pt:type="tel"
+										pt:placeholder="#{i18n['membership.company_address.postalcode.placeholder']}"
+										pt:maxlength="9"
+										value="#{msCompanyAddressView.editPostalCode}" 
+										converter="customPostalCodeConverter" />
+								</div>
+                                <div class="col-xs-6 col-sm-4 field-padding">
+	                                <h:commandLink styleClass="search-button" value="#{i18n['btn.search']}">
+	                                	<f:ajax event="action" listener="#{msCompanyAddressView.actionFindPostalCode}"  
+	                                		execute="@form" render="@form" />
+	                                </h:commandLink>
+                                </div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.streetname.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.streetname.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editStreetName}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-5 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.number.placeholder']}"
+										pt:maxlength="10"
+										value="#{msCompanyAddressView.editNumber}" />
+								</div>
+								<div class="hidden-xs col-sm-4 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.district.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.district.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editDistrict}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.complement.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.complement.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editComplement}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.city.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_address.city.placeholder']}"
+										pt:maxlength="100"
+										value="#{msCompanyAddressView.editCity}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_address.state.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-5 field-padding-12">
+									<h:selectOneMenu 
+										value="#{msCompanyAddressView.editState}">
+										<f:selectItem itemLabel="#{i18n['membership.company_address.state.placeholder']}" />
+										<f:selectItems value="#{msCompanyAddressView.listStates}"
+											var="item" itemValue="#{item.id}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-4 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton 
+										styleClass="btn normal-button" 
+										pt:type="button" 
+										value="#{i18n['btn.cancel']}"
+										onclick="$('#popup-dados-endereco-add').modal('hide');" />
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{msCompanyAddressView.actionSaveNewAddress()}"
+											execute="@form"
+											render="@form pnlCompanyAddress messageGlobal formCompanyAddress"
+											onevent="closeNewModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{msCompanyAddressView.hasError};
+		        //-- Formatação
+		        applyPostalCodeMask('.postalcode-input');
+		        applyAndroidMaxLength('.text-input');
+			</script>
+		</h:form>
+	</h:panelGroup>
+</h:body>
+</html>

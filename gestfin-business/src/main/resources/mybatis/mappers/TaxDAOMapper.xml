@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TaxDAO">
+
+	<select id="listTaxes" parameterType="map" resultMap="TaxDTO_ResultMap">
+		<![CDATA[
+			SELECT T.TaxId
+			     , T.OperatorID
+			     , T.EstablishmentID
+			     , T.CardFlagID
+			     , T.TransactionTypeID
+			     , T.startDate
+			     , T.finalDate
+			     , T.portionMin
+			     , T.portionMax
+			     , T.taxValue
+			     , T.LastUpdateDate
+			     , T.LastUpdatedByUser
+			     , O.Name as OperatorName
+			     , E.Name as EstablishmentName
+			     , C.Name as CardFlagName
+			     , Y.Name as TransactionTypeName
+			  FROM [Tax] T
+			 INNER JOIN [Operator] O ON O.ID = T.OperatorID
+			 LEFT OUTER JOIN [Establishment] E ON E.ID = T.EstablishmentID
+			 LEFT OUTER JOIN [CardFlag] C ON C.ID = T.CardFlagID
+			 INNER JOIN [TransactionType] Y ON Y.ID = T.TransactionTypeID
+			 WHERE 1 = 1															
+       	]]>
+		<if test="PARAM_OPERATOR_ID != null">
+		<![CDATA[
+			   AND T.OperatorID = #{PARAM_OPERATOR_ID}
+       	]]>
+		</if>
+		<if test="PARAM_ESTABLISHMENT_ID != null">
+		<![CDATA[
+			   AND T.EstablishmentID = #{PARAM_ESTABLISHMENT_ID}
+       	]]>
+		</if>
+		<if test="PARAM_CARD_FLAG_ID != null">
+		<![CDATA[
+			   AND T.CardFlagID = #{PARAM_CARD_FLAG_ID}
+       	]]>
+		</if>
+		<if test="PARAM_TRANSACTION_TYPE_ID != null">
+		<![CDATA[
+			   AND T.TransactionTypeID = #{PARAM_TRANSACTION_TYPE_ID}
+       	]]>
+		</if>
+		<![CDATA[
+			 ORDER BY T.startDate desc, T.finalDate desc, OperatorName asc, TransactionTypeName asc
+		]]>
+	</select>
+
+	<update id="updateTax" parameterType="TaxDTO">
+		<![CDATA[
+			UPDATE [Tax]																										
+			   SET OperatorID        = #{operator.id, 		 jdbcType=NUMERIC}
+			     , EstablishmentID   = #{establishment.id,	 jdbcType=NUMERIC}
+			     , CardFlagID   	 = #{cardFlag.id,	     jdbcType=NUMERIC}
+			     , TransactionTypeID = #{transactionType.id, jdbcType=NUMERIC}
+			     , StartDate         = #{startDate}
+			     , FinalDate         = #{startDate}
+			     , PortionMin   	 = #{portionMin,	     jdbcType=NUMERIC}
+			     , PortionMax   	 = #{portionMax,	     jdbcType=NUMERIC}
+			     , TaxValue   	     = #{taxValue,	     	 jdbcType=DECIMAL,numericScale=2}
+			     , LastUpdateDate    = #{lastUpdateDate}
+			     , LastUpdatedByUser = #{lastUpdatedByUser,	 jdbcType=VARCHAR}
+			 WHERE TaxId        = #{taxId,		jdbcType=NUMERIC}
+		]]>
+	</update>
+
+	<insert id="insertTax" parameterType="TaxDTO"
+		useGeneratedKeys="true" keyProperty="taxId" keyColumn="TaxId">
+		<![CDATA[
+			INSERT INTO [Tax] ( OperatorID
+			                   , EstablishmentID
+			                   , CardFlagID
+			                   , TransactionTypeID
+			                   , StartDate
+			                   , FinalDate
+			                   , PortionMin
+			                   , PortionMax
+			                   , TaxValue
+			                   , LastUpdateDate
+			                   , LastUpdatedByUser )																																																																					
+			            VALUES ( #{operator.id,				jdbcType=NUMERIC}																																																															
+							   , #{establishment.id,		jdbcType=NUMERIC}																																																															
+							   , #{cardFlag.id,				jdbcType=NUMERIC}																																																															
+							   , #{transactionType.id,		jdbcType=NUMERIC}
+							   , #{startDate}																																																															
+							   , #{finalDate}
+							   , #{portionMin,	     		jdbcType=NUMERIC}
+							   , #{portionMax,	     		jdbcType=NUMERIC}
+							   , #{taxValue,	     		jdbcType=DECIMAL,numericScale=2}
+							   , #{lastUpdateDate}																																																															
+							   , #{lastUpdatedByUser,		jdbcType=VARCHAR} )																																																															
+		]]>
+		<selectKey keyProperty="taxId" resultType="java.lang.Integer" order="AFTER">
+        	SELECT @@IDENTITY as taxId
+       </selectKey>
+	</insert>
+
+	<delete id="deleteTax" parameterType="TaxDTO">
+		<![CDATA[
+			DELETE FROM [Tax] 
+				WHERE TaxId = #{taxId, jdbcType=NUMERIC}																																																													
+		]]>
+	</delete>
+
+	<resultMap id="TaxDTO_ResultMap" type="TaxDTO">
+		<id property="taxId" column="TaxId" />
+		<result property="operator.id" column="OperatorID" />
+		<result property="operator.name" column="OperatorName" />
+		<result property="establishment.id" column="EstablishmentID" />
+		<result property="establishment.name" column="EstablishmentName" />
+		<result property="cardFlag.id" column="CardFlagID" />
+		<result property="cardFlag.name" column="CardFlagName" />
+		<result property="transactionType.id" column="TransactionTypeID" />
+		<result property="transactionType.name" column="TransactionTypeName" />
+		<result property="startDate" column="StartDate" />																																																															
+		<result property="finalDate" column="FinalDate" />
+		<result property="portionMin" column="PortionMin" />
+		<result property="portionMax" column="PortionMax" />
+		<result property="taxValue" column="TaxValue" />
+		<result property="lastUpdateDate" column="LastUpdateDate" />
+		<result property="lastUpdatedByUser" column="LastUpdatedByUser" />
+	</resultMap>
+
+</mapper>

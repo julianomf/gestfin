@@ -1,0 +1,611 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+<h:body>
+	<script type="text/javascript">
+			var hasError;
+	        function closeNewModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-tax-add').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeEditModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-tax-edit').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeDeleteModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-tax-delete').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+        </script>
+
+	<h:panelGroup id="popup-dados-tax-edit" styleClass="modal fade"
+		pt:role="dialog" layout="block">
+		<h:form id="formEdit" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<!-- <button type="button" class="close" data-dismiss="modal">X</button> -->
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{taxRegisterView.closeModal}"
+							value="X">
+							<f:ajax execute="@form" render="dialog-id messageGlobal" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['tax_maintain.edit.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorEdit">
+							<h:messages id="message-maintain-edit-modal-taxid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.establishment']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.establishment}">
+										<f:selectItem itemLabel="#{i18n['record.todos.label']}" />
+										<f:selectItems value="#{taxRegisterView.listEstablishments}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.operator']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.operator}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listOperators}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.cardflag']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.cardFlag}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listCardFlag}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.transactiontype']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.transactionType}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listTransactionType}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.startDate']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:inputText pt:type="tel"  
+										pt:placeholder="#{i18n['tax_maintain.input.tax.startDate.placeholder']}" 
+										value="#{taxRegisterView.editDTO.startDate}" 
+										maxlength="10"
+										styleClass="input-date">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.finalDate']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:inputText pt:type="tel"  
+										pt:placeholder="#{i18n['tax_maintain.input.tax.finalDate.placeholder']}" 
+										value="#{taxRegisterView.editDTO.finalDate}" 
+										maxlength="10"
+										styleClass="input-date">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMin']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="5" styleClass="input-integer"
+										converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMin.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMin}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMax']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="5" styleClass="input-integer"
+										converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMax.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMax}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.taxValue']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="6" styleClass="input-decimal"
+									    converter="customTaxConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.taxValue.placeholder']}"
+										value="#{taxRegisterView.editDTO.taxValue}" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{taxRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.save']}">
+										<f:ajax listener="#{taxRegisterView.actionEditSave}"
+											execute="@form"
+											render="@form pnlTaxRegister messageGlobal formTaxRegister"
+											onevent="closeEditModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{taxRegisterView.hasError};
+				$('.cpf-cnpj-input').mask(cpfCnpjBehavior, cpfCnpjOptions);
+
+				$('.input-decimal').mask("#{i18n['old.input.currency.mask']}", { reverse: true });
+				$('.input-integer').mask("#{i18n['input.currency.mask']}", { reverse: true });
+				
+		        $('.input-date').mask("#{i18n['datepicker.mask']}");
+		        $('.input-date').datepicker({
+		            format: "#{i18n['datepicker.format']}",
+		            todayBtn: "linked",
+		            language: "#{i18n['datepicker.language']}",
+		            autoclose: true
+		        });
+			</script>
+		</h:form>
+	</h:panelGroup>
+
+	<h:panelGroup id="popup-dados-tax-add" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formNewTax" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{taxRegisterView.closeModal}"
+							value="X">
+							<f:ajax render="dialog-id" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['tax_maintain.add.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorNewTax"
+							layout="block">
+							<h:messages id="message-maintain-add-modal-taxid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.establishment']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.establishment}">
+										<f:selectItem itemLabel="#{i18n['record.todos.label']}" />
+										<f:selectItems value="#{taxRegisterView.listEstablishments}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.operator']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.operator}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listOperators}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.cardflag']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.cardFlag}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listCardFlag}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.transactiontype']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:selectOneMenu converter="entityConverter"
+										value="#{taxRegisterView.editDTO.transactionType}">
+										<f:selectItem itemLabel="#{i18n['record.todas.label']}" />
+										<f:selectItems value="#{taxRegisterView.listTransactionType}"
+											var="item" itemValue="#{item}"
+											itemLabel="#{item.name}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.startDate']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:inputText pt:type="tel"  
+										pt:placeholder="#{i18n['tax_maintain.input.tax.startDate.placeholder']}" 
+										value="#{taxRegisterView.editDTO.startDate}" 
+										maxlength="10"
+										styleClass="input-date">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<label class="field-label">#{i18n['tax_maintain.label.finalDate']}</label>
+								</div>
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:inputText pt:type="tel"  
+										pt:placeholder="#{i18n['tax_maintain.input.tax.finalDate.placeholder']}" 
+										value="#{taxRegisterView.editDTO.finalDate}" 
+										maxlength="10"
+										styleClass="input-date">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMin']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="5" styleClass="input-integer"
+										converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMin.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMin}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMax']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="5" styleClass="input-integer"
+									    converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMax.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMax}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.taxValue']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="6" styleClass="input-decimal"
+									    converter="customTaxConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.taxValue.placeholder']}"
+										value="#{taxRegisterView.editDTO.taxValue}" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{taxRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.save']}">
+										<f:ajax listener="#{taxRegisterView.actionNewTax}"
+											execute="@form"
+											render="@form pnlTaxRegister messageGlobal formTaxRegister"
+											onevent="closeNewModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{taxRegisterView.hasError};
+			</script>
+		</h:form>
+	</h:panelGroup>
+	
+	<h:panelGroup id="popup-dados-tax-delete" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formDeleteTax" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h:commandButton pt:type="button" styleClass="close"
+							pt:data-dismiss="modal" action="#{taxRegisterView.closeModal}"
+							value="X">
+							<f:ajax render="dialog-id" />
+						</h:commandButton>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['tax_maintain.delete.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorDeleteTax"
+							layout="block">
+							<h:messages id="message-maintain-delete-modal-taxid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.establishment']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['tax_maintain.input.establishment.placeholder']}"
+										value="#{taxRegisterView.editDTO.establishment.name}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.operator']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['tax_maintain.input.operator.placeholder']}"
+										value="#{taxRegisterView.editDTO.operator.name}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.cardflag']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['tax_maintain.input.cardflag.placeholder']}"
+										value="#{taxRegisterView.editDTO.cardFlag.name}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.transactiontype']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+										pt:placeholder="#{i18n['tax_maintain.input.transactiontype.placeholder']}"
+										value="#{taxRegisterView.editDTO.transactionType.name}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.startDate']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+									    converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.startDate.placeholder']}"
+										value="#{taxRegisterView.editDTO.startDate}">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.finalDate']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+									    converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.finalDate.placeholder']}"
+										value="#{taxRegisterView.editDTO.finalDate}">
+										<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+											locale="#{i18n['date.format.locale']}" 
+											timeZone="#{i18n['date.format.timezone']}" /> 
+									</h:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMin']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+									    converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMin.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMin}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.portionMax']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+									    converter="customNumberConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.portionMax.placeholder']}"
+										value="#{taxRegisterView.editDTO.portionMax}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['tax_maintain.label.taxValue']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText pt:type="text" maxlength="50" readonly="true"
+									    converter="customTaxConverter"
+										pt:placeholder="#{i18n['tax_maintain.input.tax.taxValue.placeholder']}"
+										value="#{taxRegisterView.editDTO.taxValue}" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton pt:type="button" pt:data-dismiss="modal"
+										styleClass="btn normal-button"
+										action="#{taxRegisterView.closeModal}"
+										value="#{i18n['common.btn.cancel']}">
+										<f:ajax execute="@this" render="dialog-id messageGlobal" />
+									</h:commandButton>
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['common.btn.delete']}">
+										<f:ajax listener="#{taxRegisterView.actionDeleteTax}"
+											execute="@form"
+											render="@form pnlTaxRegister messageGlobal formTaxRegister"
+											onevent="closeDeleteModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{taxRegisterView.hasError};
+			</script>
+		</h:form>
+	</h:panelGroup>
+	<script type="text/javascript">
+		</script>
+</h:body>
+</html>

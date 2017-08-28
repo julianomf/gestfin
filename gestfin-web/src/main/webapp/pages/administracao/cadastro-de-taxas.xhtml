@@ -1,0 +1,245 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="title">#{i18n['tax_maintain.label.header.title']}</ui:define>
+	<ui:define name="content">
+		<!-- Menu superior (tablet e desktop) ou menu lateral (smartphone) -->
+		<h:panelGroup id="pnlTaxRegister" styleClass="body-contents"
+			layout="block">
+			<h:form id="formTaxRegister" prependId="false">
+				<script type="text/javascript">
+						var hasError;
+						function openNewModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-tax-add').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.new-button'); 		           	
+				           	}
+						}
+						function openEditModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-tax-edit').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.edit-label-icon'); 		           	
+				           	}
+						}
+						function openDeleteModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-tax-delete').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.delete-label-icon'); 		           	
+				           	}
+						}
+					</script>
+				<!-- Mensagens de erro e informação -->
+				<h:panelGroup styleClass="form-messages" id="messageGlobal">
+					<h:messages id="message-maintain-taxid" errorClass="err"
+						infoClass="info" warnClass="warn" globalOnly="true" />
+				</h:panelGroup>
+				<div class="panel panel-default">
+					<!-- Título -->
+					<div class="panel-heading">
+						<div class="header-simple">
+							<span>#{i18n['tax.record.title.label']}</span>
+						</div>
+					</div>
+					<div class="panel-body no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-10 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchEstablishment"
+												value="#{taxRegisterView.filter.establishment}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['tax_maintain.input.establishment.placeholder']}" />
+												<f:selectItems value="#{taxRegisterView.listEstablishments}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchOperator"
+												value="#{taxRegisterView.filter.operator}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['tax_maintain.input.operator.placeholder']}" />
+												<f:selectItems value="#{taxRegisterView.listOperators}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchCardFlag"
+												value="#{taxRegisterView.filter.cardFlag}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['tax_maintain.input.cardflag.placeholder']}" />
+												<f:selectItems value="#{taxRegisterView.listCardFlag}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchTransactionType"
+												value="#{taxRegisterView.filter.transactionType}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['tax_maintain.input.transactiontype.placeholder']}" />
+												<f:selectItems value="#{taxRegisterView.listTransactionType}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.name}" />
+											</h:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-2 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="search-button"
+												value="#{i18n['appraisal.btn.search']}">
+												<f:ajax event="action"
+													listener="#{taxRegisterView.actionSearchTaxes}"
+													execute="@form" render="@form pnlList messageGlobal" />
+											</h:commandLink>
+										</div>
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="new-button"
+												value="#{i18n['appraisal.btn.new']}"
+												onclick="disableControl('.new-button');">
+												<f:ajax event="action"
+													listener="#{taxRegisterView.actionBeforeNewTaxListener}"
+													execute="@this" onevent="openNewModal"
+													render="popup-dados-tax-add formNewTax" />
+											</h:commandLink>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h:panelGroup id="pnlList" layout="block">
+								<h:panelGroup styleClass="row-fluid" id="div-resultado"
+									rendered="#{taxRegisterView.listSelectedTaxes.size() gt 0}">
+
+									<!-- Indicador de quantidade retornada -->
+									<h:panelGroup id="pageViewID"
+										styleClass="col-xs-12 col-sm-12 data-table-info">
+										<label class="field-contents-bold" id="search-info">#{taxRegisterView.youAreSeeing}</label>
+									</h:panelGroup>
+									<!-- Resultado -->
+									<div class="col-xs-12 col-sm-12 table-responsive">
+										<h:dataTable id="dataTableTax"
+											value="#{taxRegisterView.listSelectedTaxes}" var="item"
+											styleClass="no-padding table table-striped data-table"
+											rows="#{taxRegisterView.numberLines}">
+
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.establishment']}</f:facet>
+												<h:outputText value="#{item.establishment.id != null ? item.establishment.name : i18n['record.todos.label']}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.operator']}</f:facet>
+												<h:outputText
+													value="#{item.operator.name}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.cardflag']}</f:facet>
+												<h:outputText value="#{item.cardFlag.id != null ? item.cardFlag.name : i18n['record.todas.label']}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.transactiontype']}</f:facet>
+												<h:outputText
+													value="#{item.transactionType.name}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.startDate']}</f:facet>
+												<h:outputText value="#{item.startDate}">
+													<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+														locale="#{i18n['date_time.format.locale']}"
+														timeZone="#{i18n['date_time.format.timezone']}" />
+												</h:outputText>
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.finalDate']}</f:facet>
+												<h:outputText value="#{item.finalDate}">
+													<f:convertDateTime pattern="#{i18n['date.format.pattern']}" 
+														locale="#{i18n['date_time.format.locale']}"
+														timeZone="#{i18n['date_time.format.timezone']}" />
+												</h:outputText>
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.portionMin']}</f:facet>
+												<h:outputText
+													value="#{item.portionMin}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.portionMax']}</f:facet>
+												<h:outputText
+													value="#{item.portionMax}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.taxValue']}</f:facet>
+												<h:outputText
+													converter="customTaxConverter"
+													value="#{item.taxValue}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.last_update']}</f:facet>
+												<h:outputText value="#{item.lastUpdateDate}">
+													<f:convertDateTime pattern="#{i18n['date_time.format.pattern']}" 
+														locale="#{i18n['date_time.format.locale']}"
+														timeZone="#{i18n['date_time.format.timezone']}" />
+												</h:outputText>
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['tax_maintain.label.responsable']}</f:facet>
+												<h:outputText value="#{item.lastUpdatedByUser}" />
+											</h:column>
+
+											<h:column pt:class="actions">
+												<h:commandLink styleClass="edit-label-icon"
+													onclick="disableControl('.edit-label-icon');">
+													<h:outputLabel
+														pt:title="#{i18n['tax_maintain.label.edit']}" />
+													<f:ajax event="action"
+														listener="#{taxRegisterView.loadEditForm(item)}"
+														execute="@this" onevent="openEditModal"
+														render="popup-dados-tax-edit formEdit" />
+												</h:commandLink>
+												<h:commandLink styleClass="delete-label-icon"
+													onclick="disableControl('.delete-label-icon');">
+													<h:outputLabel
+														pt:title="#{i18n['tax_maintain.label.delete']}" />
+													<f:ajax event="action"
+														listener="#{taxRegisterView.loadEditForm(item)}"
+														execute="@this" onevent="openDeleteModal"
+														render="popup-dados-tax-delete formDeleteTax" />
+												</h:commandLink>
+											</h:column>
+										</h:dataTable>
+									</div>
+
+									<!-- Botões inferiores -->
+									<div class="col-xs-12 col-sm-12 bottom-border"></div>
+									<h:panelGroup id="panelShowMore"
+										styleClass="col-xs-12 col-sm-4 col-sm-push-4 button-padding">
+										<h:commandButton styleClass="btn normal-button"
+											action="#{taxRegisterView.addMoreLines}"
+											rendered="#{taxRegisterView.numberLines lt taxRegisterView.listSelectedTaxes.size()}"
+											id="mostrar-mais"
+											value="#{i18n['tax_maintain.label.show_more']}">
+											<f:ajax event="action" execute="@this"
+												render="dataTableTax pageViewID panelShowMore" />
+										</h:commandButton>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<ui:include src="/pages/administracao/modal-dados-taxas.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommonDAO">
+
+	<select id="listStates" parameterType="map" resultMap="StateDTO_ResultMap">
+		<![CDATA[
+			SELECT Id
+			     , Name															
+			  FROM [State]															
+		]]>
+	</select>
+
+	<select id="findPostalCode" parameterType="map" resultMap="PostalCodeDTO_ResultMap">
+		<![CDATA[
+			SELECT PostalCode
+			     , StreetName															
+			     , District															
+			     , City															
+			     , State															
+			  FROM [PostalCode]															
+			 WHERE PostalCode = #{PARAM_POSTALCODE}
+		]]>
+	</select>
+
+	<select id="OperatorDTO_list" resultMap="OperatorDTO_ResultMap">
+		<![CDATA[
+			SELECT id, name
+			FROM OPERATOR
+			ORDER BY name
+		]]>
+	</select>
+	
+	<select id="EstablishmentDTO_list" resultMap="EstablishmentDTO_ResultMap">
+		<![CDATA[
+			SELECT id, name
+			FROM Establishment
+			ORDER BY name
+		]]>
+	</select>
+	
+	<select id="CardFlagDTO_list" resultMap="CardFlagDTO_ResultMap">
+		<![CDATA[
+			SELECT id, name
+			FROM CardFlag
+			ORDER BY name
+		]]>
+	</select>
+	
+	<select id="TransactionTypeDTO_list" resultMap="TransactionTypeDTO_ResultMap">
+		<![CDATA[
+			SELECT id, name
+			FROM TransactionType
+			ORDER BY name
+		]]>
+	</select>
+
+	<resultMap id="StateDTO_ResultMap" type="StateDTO">
+		<id property="id" column="Id" />
+		<result property="name" column="Name" />
+	</resultMap>
+
+	<resultMap id="PostalCodeDTO_ResultMap" type="PostalCodeDTO">
+		<id property="postalCode" column="PostalCode" />
+		<result property="streetName" column="StreetName" />
+		<result property="district" column="District" />
+		<result property="city" column="City" />
+		<result property="state" column="State" />
+	</resultMap>
+
+	<resultMap id="OperatorDTO_ResultMap" type="OperatorDTO"> 
+		<id property="id" column="id"/>
+		<result property="name" column="name"/> 
+	</resultMap>
+	
+	<resultMap id="EstablishmentDTO_ResultMap" type="EstablishmentDTO"> 
+		<id property="id" column="id"/>
+		<result property="name" column="name"/> 
+	</resultMap>
+	
+	<resultMap id="CardFlagDTO_ResultMap" type="CardFlagDTO"> 
+		<id property="id" column="id"/>
+		<result property="name" column="name"/> 
+	</resultMap>
+	
+	<resultMap id="TransactionTypeDTO_ResultMap" type="TransactionTypeDTO"> 
+		<id property="id" column="id"/>
+		<result property="name" column="name"/> 
+	</resultMap>
+
+</mapper>

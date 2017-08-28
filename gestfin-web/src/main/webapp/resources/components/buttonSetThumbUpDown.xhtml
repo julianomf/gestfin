@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="name" type="java.lang.String"
+			shortDescription="The buttonset name." />
+		<composite:attribute name="value" type="java.lang.String"
+			shortDescription="The selected value." />
+		<composite:attribute name="onclickup" type="java.lang.String"
+			shortDescription="Javascript evaluated when the user click the Thumb Up button." />
+		<composite:attribute name="onclickdown" type="java.lang.String"
+			shortDescription="Javascript evaluated when the user click the Thumb Down button." />
+	</composite:interface>
+	<composite:implementation>
+		<div class="btn-group btn-group-justified no-padding"
+			data-toggle="buttons">
+			<label
+				class="btn btn-primary btn-buttonset-thumbs-up #{'S' eq cc.attrs.value ? 'active' : ''}"
+				onclick="$('##{cc.attrs.name}-hidden').val('S'); eval('#{cc.attrs.onclickup}');">
+				<input type="radio" jsf:id="#{cc.attrs.name}_1"
+				pt:name="#{cc.attrs.name}" value="S"
+				pt:checked="#{'S' eq cc.attrs.value ? 'checked' : null}" />
+			</label> <label
+				class="btn btn-primary btn-buttonset-thumbs-down #{'N' eq cc.attrs.value ? 'active' : ''}"
+				onclick="$('##{cc.attrs.name}-hidden').val('N'); eval('#{cc.attrs.onclickdown}');">
+				<input type="radio" jsf:id="#{cc.attrs.name}_2"
+				pt:name="#{cc.attrs.name}" value="N"
+				pt:checked="#{'N' eq cc.attrs.value ? 'checked' : null}" />
+			</label>
+		</div>
+		<h:inputHidden pt:id="#{cc.attrs.name}-hidden"
+			value="#{cc.attrs.value}" rendered="true" />
+	</composite:implementation>
+</ui:component>

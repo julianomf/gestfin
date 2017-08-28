@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="datasource" type="java.util.List"
+			shortDescription="The buttonset name." />
+		<composite:attribute name="name" type="java.lang.String"
+			shortDescription="The buttonset name." />
+		<composite:attribute name="value" type="java.lang.Integer"
+			shortDescription="The selected value." />
+		<composite:attribute name="onclickup" type="java.lang.String"
+			shortDescription="Javascript evaluated when the user click the Thumb Up button." />
+		<composite:attribute name="onclickdown" type="java.lang.String"
+			shortDescription="Javascript evaluated when the user click the Thumb Down button." />
+		<composite:attribute name="breakbeforetitle" type="java.lang.Boolean" default="false"
+			shortDescription="Insert a line break before the title. Used with [G]oogle or [R]esource iconType." />
+			
+	</composite:interface>
+	<composite:implementation>
+		<div class="btn-group" data-toggle="buttons">
+			<ui:repeat var="btn" value="#{cc.attrs.datasource}">
+			    <ui:fragment rendered="#{'T' eq btn.iconType}">
+					<!-- [T]ext -->
+	           		<label pt:id="#{cc.attrs.name}_#{btn.id}_labelT"
+	           			class="btn btn-buttonset-blue #{btn.id eq cc.attrs.value ? 'active' : ''} #{btn.buttonClass}"
+	           			onclick="$('##{cc.attrs.name}-hidden').val(#{btn.id}); eval('#{cc.attrs.onclickup}');">
+						<input type="radio" pt:id="#{cc.attrs.name}_#{btn.id}_radioT"
+							pt:name="#{cc.attrs.name}" value="#{btn.id}"
+							pt:checked="#{btn.id eq cc.attrs.value ? 'checked' : null}">
+						</input>
+						<h:outputText value="#{btn.name}" />
+						<sub><h:outputText value="#{btn.description}" escape="false" /></sub>
+	          		</label>
+	          	</ui:fragment>
+			    <ui:fragment rendered="#{'G' eq btn.iconType}">
+					<!-- [G]oogle Material Icon -->
+	           		<label pt:id="#{cc.attrs.name}_#{btn.id}_labelG"
+	           			class="btn btn-buttonset-blue #{btn.id eq cc.attrs.value ? 'active' : ''} #{btn.buttonClass}"
+	           			onclick="$('##{cc.attrs.name}-hidden').val(#{btn.id}); eval('#{cc.attrs.onclickup}');">
+						<input type="radio" pt:id="#{cc.attrs.name}_#{btn.id}_radioG"
+							pt:name="#{cc.attrs.name}" value="#{btn.id}"
+							pt:checked="#{btn.id eq cc.attrs.value ? 'checked' : null}">
+						</input>
+						<i class='material-icons'>#{btn.iconReference}</i>
+						<ui:fragment rendered="#{true eq cc.attrs.breakbeforetitle}"><br /></ui:fragment>
+						<h:outputText value="#{btn.name}" />
+						<sub><h:outputText value="#{btn.description}" escape="false" /></sub>
+	          		</label>
+	          	</ui:fragment>
+			    <ui:fragment rendered="#{'R' eq btn.iconType}">
+					<!-- Image [R]esource -->
+	           		<label pt:id="#{cc.attrs.name}_#{btn.id}_labelR"
+	           			class="btn btn-buttonset-blue #{btn.id eq cc.attrs.value ? 'active' : ''} #{btn.buttonClass}"
+	           			onclick="$('##{cc.attrs.name}-hidden').val(#{btn.id}); eval('#{cc.attrs.onclickup}');">
+						<input type="radio" pt:id="#{cc.attrs.name}_#{btn.id}_radioR"
+							pt:name="#{cc.attrs.name}" value="#{btn.id}"
+							pt:checked="#{btn.id eq cc.attrs.value ? 'checked' : null}">
+						</input>
+						<h:graphicImage value="/resources/images/#{btn.iconReference}" />
+						<ui:fragment rendered="#{true eq cc.attrs.breakbeforetitle}"><br /></ui:fragment>
+						<h:outputText value="#{btn.name}" />
+						<sub><h:outputText value="#{btn.description}" escape="false" /></sub>
+	          		</label>
+	          	</ui:fragment>
+			
+			</ui:repeat>			
+		</div>
+		<h:inputHidden pt:id="#{cc.attrs.name}-hidden"
+			value="#{cc.attrs.value}" rendered="true" />
+	</composite:implementation>
+</ui:component>

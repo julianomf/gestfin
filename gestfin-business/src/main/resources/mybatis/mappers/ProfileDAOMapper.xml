@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProfileDAO">
+
+	<select id="listProfiles" parameterType="map" resultMap="ProfileDTO_ResultMap">
+		<![CDATA[
+			SELECT ProfileID															
+			     , ProfileName															
+			     , ProfileDescription															
+			     , IsActive															
+			     , LastUpdateDate															
+			     , LastUpdatedByUser															
+			  FROM [Profile]												
+			 ORDER BY ProfileName
+		]]>
+	</select>
+
+	<resultMap id="ProfileDTO_ResultMap" type="ProfileDTO">
+		<id property="profileId" column="ProfileId" />
+		<result property="profileName" column="ProfileName" />
+		<result property="profileDescription" column="ProfileDescription" />
+		<result property="isActive" column="IsActive" />
+		<result property="lastUpdateDate" column="LastUpdateDate" />
+		<result property="lastUpdatedByUser" column="LastUpdatedByUser" />
+	</resultMap>
+</mapper>

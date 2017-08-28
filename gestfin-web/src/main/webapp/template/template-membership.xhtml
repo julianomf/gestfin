@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+		<h:outputScript     name="frameworks/jquery/jquery-2.2.3.min.js"/>
+		<h:outputStylesheet name="frameworks/bootstrap/3.3.6/css/bootstrap.min.css"/>
+		<h:outputScript		name="frameworks/bootstrap/3.3.6/js/bootstrap.min.js"/>
+		<h:outputScript		name="frameworks/jquery-mask/jquery.mask.min.js"/>
+		<h:outputStylesheet name="frameworks/jquery-file-upload-master/css/jquery.fileupload.css"/>
+
+		<h:outputScript		name="frameworks/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"/>
+		<h:outputStylesheet name="frameworks/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css"/>
+		
+		<h:outputStylesheet name="stylesheets/nsol-gestfin-#{pageNavigationBean.cssVersion}.css" />
+		<h:outputScript name="javascripts/nsol-gestfin.js?#{pageNavigationBean.javaScriptVersion}" />
+		<title><ui:insert name="title">#{i18n['app.title']}</ui:insert></title>
+		
+		<script language="javascript">
+
+			var timer = null;
+			var elapsed = 0;
+			var maxInactiveTimeout = #{pageNavigationBean.checkInactiveTimeout};
+			var checkInterval = #{pageNavigationBean.checkInactiveInterval};
+	
+			function checkSessionInactive() {
+				
+				if (maxInactiveTimeout > 0) {
+					elapsed = maxInactiveTimeout;
+					timer = setTimeout(function() { verifyInactive(); }, checkInterval);
+				};
+	
+				function verifyInactive() {
+					if (timer) {
+						clearTimeout(timer);
+					};
+					elapsed -= checkInterval;
+					if (!(elapsed > 0)) {
+						$('.btn-logout').click();
+					}
+					timer = setTimeout(function() { verifyInactive(); }, checkInterval);
+				};
+				
+			};
+			
+			checkSessionInactive();
+			
+		</script>
+		
+    </h:head>
+    
+    <h:body> 
+	
+    <!-- Menu superior (tablet e desktop) ou menu lateral (smartphone) -->
+    <div id="side-menu"><ui:include src="/pages/common/side-menu.xhtml" /></div>
+    <div class="body-contents">
+	    <!-- Navegação de áreas (smartphone) -->
+	    <h:form id="formTemplateTop" prependId="false">
+			<script type="text/javascript">
+				var isJumping = false;
+			</script>    
+		    <h:panelGroup id="appraisal-breadcumb-top" styleClass="breadcrumb" rendered="#{not templateBean.hideBreadcumb}" layout="block">
+				<div class="visible-xs-block visible-sm-block">
+				    <div class="controlls">
+				    </div>
+				</div>
+				<ol id="appraisal-breadcumb">
+				    <li data-index="1" class="#{templateBean.mainNavigationStepClass('1')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(1)}">
+							<h:commandLink value="#{i18n['membership.step.1']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(1)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(1)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.1']}</a>
+			    		</ui:fragment>
+			    	</li>
+				    <li data-index="2" class="#{templateBean.mainNavigationStepClass('2')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(2)}">
+							<h:commandLink value="#{i18n['membership.step.2']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(2)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(2)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.2']}</a>
+			    		</ui:fragment>
+			    	</li>
+				    <li data-index="3" class="#{templateBean.mainNavigationStepClass('3')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(3)}">
+							<h:commandLink value="#{i18n['membership.step.3']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(3)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(3)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.3']}</a>
+			    		</ui:fragment>
+			    	</li>
+				    <li data-index="4" class="#{templateBean.mainNavigationStepClass('4')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(4)}">
+							<h:commandLink value="#{i18n['membership.step.4']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(4)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(4)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.4']}</a>
+			    		</ui:fragment>
+			    	</li>
+				    <li data-index="5" class="#{templateBean.mainNavigationStepClass('5')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(5)}">
+							<h:commandLink value="#{i18n['membership.step.5']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(5)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(5)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.5']}</a>
+			    		</ui:fragment>
+			    	</li>
+				    <li data-index="6" class="#{templateBean.mainNavigationStepClass('6')}">
+					    <ui:fragment rendered="#{templateBean.membershipStepNavigation(6)}">
+							<h:commandLink value="#{i18n['membership.step.6']}" onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+		                       	<f:ajax listener="#{templateBean.navigateTo(6)}" 
+		                       		event="action" 
+		                       		execute="@form"
+		                       		render="@form" />
+		               		</h:commandLink> 
+					    </ui:fragment>
+			    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(6)}">
+			    			<a href="javascript:void(0)">#{i18n['membership.step.6']}</a>
+			    		</ui:fragment>
+			    	</li>
+				</ol>
+		    </h:panelGroup>
+		</h:form>
+	   	<!-- Conteúdo variável -->
+	    <div id="content">
+	    	<ui:insert name="content">Page content</ui:insert>
+	    </div>
+	</div>
+    <!-- Navegação de áreas (desktop) -->
+    <h:form id="formTemplateBottom" prependId="false">
+		<script type="text/javascript">
+			var isJumping = false;
+		</script>    
+	    <h:panelGroup id="appraisal-breadcumb-bottom" styleClass="breadcrumb hidden-xs" rendered="#{not templateBean.hideBreadcumb}" layout="block">
+			<div class="visible-xs-block visible-sm-block">
+			    <div class="controlls">
+			        <!--<a class="breadcrumb-opener" href="javascript:void(0)"><i class='material-icons'>keyboard_arrow_down</i></a>-->
+			    </div>
+			</div>
+			<ol id="appraisal-breadcumb">
+			    <li data-index="1" class="#{templateBean.mainNavigationStepClass('1')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(1)}">
+						<h:commandLink value="#{i18n['membership.step.1']}" 
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(1)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(1)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.1']}</a>
+		    		</ui:fragment>
+		    	</li>
+			    <li data-index="2" class="#{templateBean.mainNavigationStepClass('2')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(2)}">
+						<h:commandLink value="#{i18n['membership.step.2']}"
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(2)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(2)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.2']}</a>
+		    		</ui:fragment>
+		    	</li>
+			    <li data-index="3" class="#{templateBean.mainNavigationStepClass('3')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(3)}">
+						<h:commandLink value="#{i18n['membership.step.3']}"
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(3)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(3)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.3']}</a>
+		    		</ui:fragment>
+		    	</li>
+			    <li data-index="4" class="#{templateBean.mainNavigationStepClass('4')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(4)}">
+						<h:commandLink value="#{i18n['membership.step.4']}"
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(4)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(4)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.4']}</a>
+		    		</ui:fragment>
+		    	</li>
+			    <li data-index="5" class="#{templateBean.mainNavigationStepClass('5')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(5)}">
+						<h:commandLink value="#{i18n['membership.step.5']}"
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(5)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(5)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.5']}</a>
+		    		</ui:fragment>
+		    	</li>
+			    <li data-index="6" class="#{templateBean.mainNavigationStepClass('6')}">
+				    <ui:fragment rendered="#{templateBean.membershipStepNavigation(6)}">
+						<h:commandLink value="#{i18n['membership.step.6']}"
+							onclick="if(isJumping) { event.stopPropagation(); isJumping = false; }">
+	                       	<f:ajax listener="#{templateBean.navigateTo(6)}" 
+	                       		event="action" 
+	                       		execute="@form"
+	                       		render="@form" />
+	               		</h:commandLink> 
+				    </ui:fragment>
+		    		<ui:fragment rendered="#{not templateBean.membershipStepNavigation(6)}">
+		    			<a href="javascript:void(0)">#{i18n['membership.step.6']}</a>
+		    		</ui:fragment>
+		    	</li>
+			</ol>
+	    </h:panelGroup>
+    </h:form>
+   	<!-- Painel exibido durante as requisições Ajax -->
+	<div class="modal fade" id="ajax_loader" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-sm modal-vertical-centered">
+			<div class="modal-content">
+		        <div class="modal-body">
+					<div class="container-fluid no-padding">
+						<div class="row-fluid no-padding">
+							<div class="col-xs-1"></div>
+							<div class="col-xs-2">
+								<h:graphicImage value="/resources/images/ajax-loader.gif" />
+							</div>
+							<div class="col-xs-8">
+								<h:outputText value="#{i18n['loading.message']}" />
+							</div>
+							<div class="col-xs-1"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	    jsf.ajax.addOnEvent(function(data) {
+	        switch (data.status) {
+	            case "begin":
+	            	showAjaxLoader();
+	                break;
+	            case "complete":
+	                break;
+	            case "success":
+	            	hideAjaxLoader();
+	            	checkSessionInactive();
+	                break;
+	        }
+	    });
+
+	    jsf.ajax.addOnError(function(data) {
+    		hideAjaxLoader();
+	    });
+
+        //-- Contorno para problema de sobreposição de modais
+		$("#ajax_loader").on('hidden.bs.modal', function (event) {
+			if ($('.modal:visible').length) { //check if any modal is open
+				$('body').addClass('modal-open');//add class to body
+			}
+		});
+
+		function showAjaxLoader() {
+			$(".btn-dummy").focus();
+        	$("#ajax_loader").modal({backdrop: 'static', keyboard: false});			
+        }
+
+        function hideAjaxLoader() {
+        	$("#ajax_loader").modal('hide');        
+        }
+
+	</script>	
+    </h:body>
+</html>

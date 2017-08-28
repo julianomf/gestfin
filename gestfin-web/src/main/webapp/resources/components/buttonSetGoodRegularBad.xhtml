@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="name" type="java.lang.String"
+			shortDescription="The buttonset name." />
+		<composite:attribute name="value" type="java.lang.String"
+			shortDescription="The selected value." />
+	</composite:interface>
+	<composite:implementation>
+		<div class="btn-group btn-group-justified no-padding"
+			data-toggle="buttons">
+			<label
+				class="btn btn-primary btn-buttonset-yes #{'G' eq cc.attrs.value ? 'active' : ''}"
+				onclick="$('##{cc.attrs.name}-hidden').val('G');"> <input
+				type="radio" jsf:id="#{cc.attrs.name}_1" pt:name="#{cc.attrs.name}"
+				value="G" pt:checked="#{'G' eq cc.attrs.value ? 'checked' : null}" />
+				<h:outputText value="#{i18n['appraisal.btn.good']}" />
+			</label> <label
+				class="btn btn-primary btn-buttonset-regular #{'R' eq cc.attrs.value ? 'active' : ''}"
+				onclick="$('##{cc.attrs.name}-hidden').val('R');"> <input
+				type="radio" jsf:id="#{cc.attrs.name}_2" pt:name="#{cc.attrs.name}"
+				value="R" pt:checked="#{'R' eq cc.attrs.value ? 'checked' : null}" />
+				<h:outputText value="#{i18n['appraisal.btn.regular']}" />
+			</label> <label
+				class="btn btn-primary btn-buttonset-no #{'B' eq cc.attrs.value ? 'active' : ''}"
+				onclick="$('##{cc.attrs.name}-hidden').val('B');"> <input
+				type="radio" jsf:id="#{cc.attrs.name}_3" pt:name="#{cc.attrs.name}"
+				value="B" pt:checked="#{'B' eq cc.attrs.value ? 'checked' : null}" />
+				<h:outputText value="#{i18n['appraisal.btn.bad']}" />
+			</label>
+		</div>
+		<h:inputHidden pt:id="#{cc.attrs.name}-hidden"
+			value="#{cc.attrs.value}" rendered="true" />
+	</composite:implementation>
+</ui:component>

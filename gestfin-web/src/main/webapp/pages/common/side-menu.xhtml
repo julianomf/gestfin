@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition>
+	<h:body>
+		<h:form>
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="container navbar-container">
+					<div class="col-sm-1 navbar-container-left">
+						<div class="navbar-header no-padding">
+							<button type="button"
+								class="navbar-toggle collapsed no-padding vertical-align-middle"
+								data-toggle="collapse" data-target="#navbar"
+								aria-expanded="false" aria-controls="navbar">
+								<i class="material-icons">&#xE5D2;</i>
+							</button>
+							<h:commandLink
+								action="/pages/home/home.xhtml?faces-redirect=true"
+								styleClass="navbar-logo">
+								<h:graphicImage value="/resources/images/trans.gif" />
+							</h:commandLink>
+						</div>
+					</div>
+					<h:panelGroup id="noNavBar" styleClass="col-sm-11 navbar-container-right" 
+						layout="block" rendered="#{pageNavigationBean.userLogged eq false}">
+					</h:panelGroup>
+					<h:panelGroup id="withNavBar" styleClass="col-sm-11 navbar-container-right" 
+						layout="block" rendered="#{pageNavigationBean.userLogged eq true}">
+						<div id="navbar" class="navbar-collapse collapse no-padding">
+							<ul class="nav navbar-nav no-padding">
+								<li class="menu-item dropdown"><a href="#" class="dropdown-toggle"
+									data-toggle="dropdown" role="button" aria-haspopup="true"
+									aria-expanded="false"><i class="material-icons">&#xE7FB;</i>
+										<h:outputText
+											value="#{i18n['home.menu.administration.title']}" /><span
+										class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><h:commandLink
+												action="/pages/administracao/cadastro-de-usuarios.xhtml?faces-redirect=true">
+												<i class="material-icons">&#xE8A6;</i>
+												<h:outputText
+													value="#{i18n['home.menu.administration.item.user_record']}" />
+											</h:commandLink></li>
+										
+										<!-- Cadastro de Taxas -->
+										<li><h:commandLink
+												action="/pages/administracao/cadastro-de-taxas.xhtml?faces-redirect=true">
+												<i class="material-icons">&#xE227;</i>
+												<h:outputText
+													value="#{i18n['home.menu.administration.item.tax_record']}" />
+											</h:commandLink></li>
+										
+										<!-- Cadastro de Terminais -->
+										<li><h:commandLink
+												action="/pages/administracao/cadastro-de-terminais.xhtml?faces-redirect=true">
+												<i class="material-icons">&#xE1B1;</i>
+												<h:outputText
+													value="#{i18n['home.menu.administration.item.terminals_record']}" />
+											</h:commandLink></li>
+									</ul>
+								</li>
+								<li class="menu-item dropdown"><a href="#" class="dropdown-toggle"
+									data-toggle="dropdown"><i class="material-icons">&#xE853;</i>
+										<h:outputText
+											value="#{pageNavigationBean.loggedUserName}" /><span
+										class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<ui:fragment rendered="#{pageNavigationBean.userLoggedOwnerCompanyId ne null}">
+											<li>
+												<a href="#" class="btn-logout"><i class="material-icons">&#xE0AF;</i>
+												<h:outputText value="#{i18n['home.menu.logged_user.company.title']}" /></a>
+											</li>
+											<li class="field-padding">
+												<h:commandLink 
+													action="#{pageNavigationBean.actionCompanyData}">
+													<i class="material-icons">&#xE88F;</i>
+													<h:outputText value="#{i18n['home.menu.logged_user.company.data.title']}" />
+												</h:commandLink>
+											</li>
+											<li class="field-padding">
+												<h:commandLink
+													action="#{pageNavigationBean.actionCompanyAddress}">
+													<i class="material-icons">&#xE0C8;</i>
+													<h:outputText value="#{i18n['home.menu.logged_user.company.address.title']}" />
+												</h:commandLink>
+											</li>
+											<li class="field-padding">
+												<h:commandLink
+													action="#{pageNavigationBean.actionCompanyContact}">
+													<i class="material-icons">&#xE8A8;</i>
+													<h:outputText value="#{i18n['home.menu.logged_user.company.contact.title']}" />
+												</h:commandLink>
+											</li>
+											<li class="field-padding">
+												<h:commandLink
+													action="#{pageNavigationBean.actionCompanyAccountancy}">
+													<i class="material-icons">&#xE227;</i>
+													<h:outputText value="#{i18n['home.menu.logged_user.company.accountancy.title']}" />
+												</h:commandLink>
+											</li>
+										</ui:fragment>
+										<li>
+											<h:commandLink styleClass="btn-logout"
+												action="#{pageNavigationBean.actionLogout()}">
+												<i class="material-icons">&#xE879;</i>
+												<h:outputText value="#{i18n['home.menu.logged_user.exit.title']}" />
+											</h:commandLink>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<!--/.nav-collapse -->
+					</h:panelGroup>
+				</div>
+				<!--/.container-fluid -->
+			</nav>
+			<h:commandButton id="btnDummy" styleClass="btn-dummy"
+				onclick="return false;"
+				style="position:absolute;top:-10rem;left:-10rem;" />
+		</h:form>
+	</h:body>
+</ui:composition>
+</html>

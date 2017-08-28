@@ -1,0 +1,410 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+    <h:body>
+        <ui:composition template="/template/template-membership.xhtml">
+            <ui:param name="templateBean" value="#{msCompanyConfirmView}" />
+            <ui:define name="content">
+			    <h:panelGroup id="pnlCustomerData" styleClass="body-contents" layout="block">
+			        <h:form id="formCustomerData" prependId="false"
+		        		onkeypress="if (event.keyCode == 13) { $('#btnFinish').trigger('click'); return false; }">
+						<script type="text/javascript">
+							var hasError = #{msCompanyConfirmView.hasError};
+						    function checkError(data){
+					           	if(data.status == 'success'){
+						        	if (hasError) {
+						           	 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+							        }
+					           	}
+							}
+						</script>
+			        	<!-- Mensagens de erro e informação -->
+			            <h:panelGroup styleClass="form-messages" id="msgError" layout="block">
+			            	<h:messages id="messages-id" errorClass="err" infoClass="info" warnClass="warn"/>
+			            </h:panelGroup>		        
+			            <div class="panel panel-default">
+			                <!-- Título do passo da avaliação (tablet e desktop) -->
+			                <div class="panel-heading hidden-xs">
+			                    <div class="header-simple">
+			                        <span data-index="1"><h:outputText value="#{i18n['membership.confirmation.title']}" /></span>
+			                    </div>
+			                </div>
+			                <div class="panel-body no-padding">
+			                    <div class="container-fluid no-padding">
+			                        <div class="row-fluid">
+
+			                            <!-- Seus dados -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.your_data.label']}" />
+			                            </div>
+			                            
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.your_data.mail.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-10 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.user.userMail}" />
+			                            </div>
+			                            
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.your_data.name.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-10 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.user.userName}" />
+			                            </div>
+
+			                            <!-- Dados da empresa -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.company_data.label']}" />
+			                            </div>
+			                            
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.kindofperson.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{i18n[msCompanyConfirmView.membershipInfo.company.kindOfPersonDescription]}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                        
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.documentnumber.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.documentNumber}" 
+			                                	converter="customCpfCnpjConverter" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.socialname.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.socialName}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.fantasyname.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.fantasyName}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.stateregistration.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	rendered="#{false eq msCompanyConfirmView.membershipInfo.company.freeFromStateRegistration}"
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.stateRegistration}" />
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	rendered="#{true eq msCompanyConfirmView.membershipInfo.company.freeFromStateRegistration}"
+			                                	value="#{i18n['membership.company_data.free.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.municipalregistration.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.municipalRegistration}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.taxregime.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.taxRegime.name}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.cnae.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.cnae}" 
+			                                	converter="customCnaeConverter" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_data.sponsor.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.sponsor}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                            <div class="col-sm-6 hidden-xs"></div>
+
+			                            <!-- Endereços -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.company_address.label']}" />
+			                            </div>
+			                            
+			                            <!-- -->
+										<h:panelGroup styleClass="col-xs-12 col-sm-12 title-padding-12" style="block"
+											rendered="#{msCompanyConfirmView.membershipInfo.company.addresses.size() eq 0}">
+			                                <h:outputLabel styleClass="field-contents" value="#{i18n['membership.company_address.no_records_found']}" />
+										</h:panelGroup>									
+										<h:panelGroup styleClass="col-xs-12 col-sm-12 table-responsive" style="block"
+											rendered="#{msCompanyConfirmView.membershipInfo.company.addresses.size() gt 0}">
+											<h:dataTable id="dataTableAddressess"
+												value="#{msCompanyConfirmView.membershipInfo.company.addresses}" var="item"
+												styleClass="no-padding table table-striped data-table">
+	
+												<h:column pt:class="text-center">
+													<!-- column header -->
+													<f:facet name="header">#{i18n['membership.company_address.description.label']}</f:facet>
+													<!-- row record -->
+													<h:outputText value="#{item.description}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.postalcode.label']}</f:facet>
+													<h:outputText value="#{item.postalCode}" converter="customPostalCodeConverter" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.streetname.label']}</f:facet>
+													<h:outputText value="#{item.streetName}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.number.label']}</f:facet>
+													<h:outputText value="#{item.number}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.district.label']}</f:facet>
+													<h:outputText value="#{item.district}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.complement.label']}</f:facet>
+													<h:outputText value="#{item.complement}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.city.label']}</f:facet>
+													<h:outputText value="#{item.city}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_address.state.label']}</f:facet>
+													<h:outputText value="#{item.state}" />
+												</h:column>
+											</h:dataTable>
+										</h:panelGroup>
+
+			                            <!-- Contatos -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.company_contacts.label']}" />
+			                            </div>
+
+			                            <!-- -->
+										<h:panelGroup styleClass="col-xs-12 col-sm-12 title-padding-12" style="block"
+											rendered="#{msCompanyConfirmView.membershipInfo.company.contacts.size() eq 0}">
+			                                <h:outputLabel styleClass="field-contents" value="#{i18n['membership.company_contact.no_records_found']}" />
+										</h:panelGroup>									
+										<h:panelGroup styleClass="col-xs-12 col-sm-12 table-responsive" style="block"
+											rendered="#{msCompanyConfirmView.membershipInfo.company.contacts.size() gt 0}">
+											<h:dataTable id="dataTableContacts"
+												value="#{msCompanyConfirmView.membershipInfo.company.contacts}" var="item"
+												styleClass="no-padding table table-striped data-table">
+	
+												<h:column pt:class="text-center">
+													<!-- column header -->
+													<f:facet name="header">#{i18n['membership.company_contact.name.label']}</f:facet>
+													<!-- row record -->
+													<h:outputText value="#{item.name}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_contact.mail.label']}</f:facet>
+													<h:outputText value="#{item.mail}" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_contact.phone_number.label']}</f:facet>
+													<h:outputText 
+														value="#{item.phoneNumber}"
+														converter="customPhoneConverter" />
+												</h:column>
+												<h:column pt:class="text-center">
+													<f:facet name="header">#{i18n['membership.company_contact.mobile_number.label']}</f:facet>
+													<h:outputText 
+														value="#{item.mobileNumber}"
+														converter="customPhoneConverter" />
+												</h:column>
+											</h:dataTable>
+										</h:panelGroup>
+
+			                            <!-- Contabilidade -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.company_accountancy.label']}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.name.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.accountancy.name}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.documentnumber.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.accountancy.documentNumber}" 
+			                                	converter="customCnpjConverter" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+			                        
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.sponsor.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.accountancy.sponsor}" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.phone_number.label']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.accountancy.phoneNumber}" 
+			                                	converter="customPhoneConverter" />
+			                            </div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-2 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_accountancy.mail.label']}" />
+			                            </div>
+			                            <div class="col-xs-6 col-sm-4 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.accountancy.mail}" />
+			                            </div>
+			                            <div class="col-sm-6 hidden-xs"></div>
+			                            <div class="col-xs-12 visible-xs-block bottom-border"></div>
+
+			                            <!-- Questionário -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.questionaire.label']}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_size.title']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.questionaire.size.name}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_employee.title']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.questionaire.employee.name}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_sell.title']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-6 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.questionaire.sell.name}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_business.title']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-6 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	value="#{msCompanyConfirmView.membershipInfo.company.questionaire.business.name}" />
+			                            </div>
+
+			                            <!-- -->
+			                            <div class="col-xs-12 col-sm-6 title-padding-12">
+			                                <h:outputLabel styleClass="field-label" value="#{i18n['membership.company_invoices.title']}" />
+			                            </div>
+			                            <div class="col-xs-12 col-sm-6 field-padding-12">
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	rendered="#{true eq msCompanyConfirmView.membershipInfo.company.questionaire.isHasIssuedInvoices()}"
+			                                	value="#{i18n['membership.company_invoices.yes.label']}" />
+			                                <h:outputLabel styleClass="field-contents" 
+			                                	rendered="#{false eq msCompanyConfirmView.membershipInfo.company.questionaire.isHasIssuedInvoices()}"
+			                                	value="#{i18n['membership.company_invoices.no.label']}" />
+			                            </div>
+
+			                            <!-- Problemas -->
+			                            <div class="col-xs-12 col-sm-12 title-padding-12">
+			                                <h:outputLabel styleClass="field-contents-bold" value="#{i18n['membership.confirmation.issues.label']}" />
+			                            </div>
+
+			                            <!-- -->
+										<ui:repeat var="itm" value="#{msCompanyConfirmView.membershipInfo.company.questionaire.issues}">
+											<div class="col-xs-12 col-sm-12 field-padding-12">
+												<h:outputLabel styleClass="field-contents"
+													value="#{itm.name}" />
+											</div>
+										</ui:repeat>
+													                        
+			                            <!-- Botões inferiores -->
+										<div class="col-xs-12 col-sm-12 bottom-border"></div>
+			                            <div class="col-xs-5 col-sm-2 button-padding">
+			                                <h:commandButton styleClass="btn normal-button" id="btnBack"
+			                                	value="#{i18n['btn.back']}" action="#{msCompanyConfirmView.actionBack}">
+			                                	<f:ajax execute="@form" event="action" render="@form" />
+			                                </h:commandButton>
+			                            </div>
+			                            <div class="col-xs-2 col-sm-8"></div>
+			                            <div class="col-xs-5 col-sm-2 button-padding">
+			                                <h:commandButton styleClass="btn default-button" id="btnFinish" 
+			                                	value="#{i18n['btn.finish']}" action="#{msCompanyConfirmView.actionFinish}">
+			                                	<f:ajax execute="@form" event="action" render="@form" onevent="checkError" />
+			                                </h:commandButton>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				        <script>
+
+				        </script>
+			        </h:form>
+			    </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+	</h:body>
+</html>

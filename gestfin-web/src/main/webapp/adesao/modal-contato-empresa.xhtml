@@ -1,0 +1,279 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:my="http://xmlns.jcp.org/jsf/composite/components">
+<h:body>
+	<script type="text/javascript">
+			var hasError;
+	        function closeNewModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-contato-add').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+	        function closeEditModal(data){
+	           	if(data.status == 'success'){
+	            	if (!hasError) {
+	            		$('#popup-dados-contato-edit').modal('hide');
+	            		window.scrollTo(0, 0);
+	            	}
+ 			 	}
+ 			}
+        </script>
+
+	<h:panelGroup id="popup-dados-contato-edit" styleClass="modal fade"
+		pt:role="dialog" layout="block">
+		<h:form id="formEdit" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">X</button>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['membership.company_contact.edit.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorEdit">
+							<h:messages id="message-maintain-edit-modal-contactid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.name.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										value="#{msCompanyContactView.editName}"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_contact.name.placeholder']}"
+										pt:maxlength="100" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.mail.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										value="#{msCompanyContactView.editMail}"
+										pt:type="email"
+										pt:placeholder="#{i18n['membership.company_contact.mail.placeholder']}"
+										pt:maxlength="255" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.phone_number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-4 field-padding-12">
+									<h:inputText 
+										styleClass="phone-input"
+										value="#{msCompanyContactView.editPhoneNumber}"
+										pt:type="tel"  
+										pt:placeholder="#{i18n['membership.company_contact.phone_number.placeholder']}"
+										pt:maxlength="20"
+										converter="customPhoneConverter">
+									</h:inputText>
+								</div>
+								<div class="hidden-xs col-sm-5 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.mobile_number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-4 field-padding-12">
+									<h:inputText 
+										styleClass="phone-input"
+										value="#{msCompanyContactView.editMobileNumber}"
+										pt:type="tel"  
+										pt:placeholder="#{i18n['membership.company_contact.mobile_number.placeholder']}"
+										pt:maxlength="20"
+										converter="customPhoneConverter">
+									</h:inputText>
+								</div>
+								<div class="hidden-xs col-sm-5 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton 
+										styleClass="btn normal-button" 
+										pt:type="button" 
+										value="#{i18n['btn.cancel']}"
+										onclick="$('#popup-dados-contato-edit').modal('hide');" />
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{msCompanyContactView.actionSaveEditContact}"
+											execute="@form"
+											render="@form pnlCompanyContact messageGlobal formCompanyContact"
+											onevent="closeEditModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{msCompanyContactView.hasError};
+		        //-- Formatação
+		        applyPhoneMask('.phone-input');
+		        applyAndroidMaxLength('.text-input');
+			</script>
+		</h:form>
+	</h:panelGroup>
+
+	<h:panelGroup id="popup-dados-contato-add" styleClass="modal fade"
+		pt:role="dialog">
+		<h:form id="formAdd" prependId="false">
+			<div class="modal-dialog modal-md">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">X</button>
+						<h4 class="modal-title">
+							<h:outputText value="#{i18n['membership.company_contact.add.title']}" />
+						</h4>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Mensagens de erro e informação -->
+						<h:panelGroup styleClass="form-messages" id="msgErrorNewContact"
+							layout="block">
+							<h:messages id="message-maintain-add-modal-contactid"
+								errorClass="err" infoClass="info" warnClass="warn"
+								globalOnly="false" />
+						</h:panelGroup>
+						<div class="container-fluid no-padding">
+							<div class="row-fluid">
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.name.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										value="#{msCompanyContactView.editName}"
+										pt:type="text"
+										pt:placeholder="#{i18n['membership.company_contact.name.placeholder']}"
+										pt:maxlength="100" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.mail.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-9 field-padding-12">
+									<h:inputText 
+										styleClass="text-input"
+										value="#{msCompanyContactView.editMail}"
+										pt:type="email"
+										pt:placeholder="#{i18n['membership.company_contact.mail.placeholder']}"
+										pt:maxlength="255" />
+								</div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.phone_number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-4 field-padding-12">
+									<h:inputText 
+										styleClass="phone-input"
+										value="#{msCompanyContactView.editPhoneNumber}"
+										pt:type="tel"  
+										pt:placeholder="#{i18n['membership.company_contact.phone_number.placeholder']}"
+										pt:maxlength="20"
+										converter="customPhoneConverter">
+									</h:inputText>
+								</div>
+								<div class="hidden-xs col-sm-5 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+
+								<!-- -->
+								<div class="col-xs-12 col-sm-3 title-padding-12">
+									<h:outputLabel styleClass="field-label"
+										value="#{i18n['membership.company_contact.mobile_number.label']}" />
+								</div>
+								<div class="col-xs-12 col-sm-4 field-padding-12">
+									<h:inputText 
+										styleClass="phone-input"
+										value="#{msCompanyContactView.editMobileNumber}"
+										pt:type="tel"  
+										pt:placeholder="#{i18n['membership.company_contact.mobile_number.placeholder']}"
+										pt:maxlength="20"
+										converter="customPhoneConverter">
+									</h:inputText>
+								</div>
+								<div class="hidden-xs col-sm-5 title-padding-12"></div>
+								<div class="col-xs-12 col-sm-12 bottom-border"></div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton 
+										styleClass="btn normal-button" 
+										pt:type="button" 
+										value="#{i18n['btn.cancel']}"
+										onclick="$('#popup-dados-contato-add').modal('hide');" />
+								</div>
+								<div class="hidden-xs col-sm-4 button-padding"></div>
+								<div class="col-xs-12 col-sm-4 button-padding">
+									<h:commandButton styleClass="btn default-button"
+										value="#{i18n['user_maintain.btn.save']}">
+										<f:ajax listener="#{msCompanyContactView.actionSaveNewContact}"
+											execute="@form"
+											render="@form pnlCompanyContact messageGlobal formCompanyContact"
+											onevent="closeNewModal" />
+									</h:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				hasError = #{msCompanyContactView.hasError};
+		        //-- Formatação
+		        applyPhoneMask('.phone-input');
+		        applyAndroidMaxLength('.text-input');
+			</script>
+		</h:form>
+	</h:panelGroup>
+</h:body>
+</html>

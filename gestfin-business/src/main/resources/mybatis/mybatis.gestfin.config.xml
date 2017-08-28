@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="mybatis/dbcp.gestfin.properties" />
+
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="logImpl" value="${config.log.impl}" />
+	</settings>
+
+	<!-- Entity Map -->
+	<typeAliases>
+		<typeAlias alias="CardFlagDTO" type="br.com.nsol.gestfin.dto.CardFlagDTO" />
+		<typeAlias alias="EstablishmentDTO" type="br.com.nsol.gestfin.dto.EstablishmentDTO" />
+		<typeAlias alias="OperatorDTO" type="br.com.nsol.gestfin.dto.OperatorDTO" />
+		<typeAlias alias="ProfileDTO" type="br.com.nsol.gestfin.dto.ProfileDTO" />
+		<typeAlias alias="SystemParameterDTO" type="br.com.nsol.gestfin.dto.SystemParameterDTO" />
+		<typeAlias alias="StateDTO" type="br.com.nsol.gestfin.dto.StateDTO" />
+		<typeAlias alias="PostalCodeDTO" type="br.com.nsol.gestfin.dto.PostalCodeDTO" />
+
+		<typeAlias alias="CompanyBusinessDTO" type="br.com.nsol.gestfin.dto.CompanyBusinessDTO" />
+		<typeAlias alias="CompanyEmployeeDTO" type="br.com.nsol.gestfin.dto.CompanyEmployeeDTO" />
+		<typeAlias alias="CompanySellDTO" type="br.com.nsol.gestfin.dto.CompanySellDTO" />
+		<typeAlias alias="CompanySizeDTO" type="br.com.nsol.gestfin.dto.CompanySizeDTO" />
+		<typeAlias alias="CompanyIssueDTO" type="br.com.nsol.gestfin.dto.CompanyIssueDTO" />
+		<typeAlias alias="TaxRegimeDTO" type="br.com.nsol.gestfin.dto.TaxRegimeDTO" />
+
+		<typeAlias alias="CompanyDTO" type="br.com.nsol.gestfin.dto.CompanyDTO" />
+		<typeAlias alias="CompanyAddressDTO" type="br.com.nsol.gestfin.dto.CompanyAddressDTO" />
+		<typeAlias alias="CompanyContactDTO" type="br.com.nsol.gestfin.dto.CompanyContactDTO" />
+		<typeAlias alias="CompanyAccountancyDTO" type="br.com.nsol.gestfin.dto.CompanyAccountancyDTO" />
+		<typeAlias alias="CompanyQuestionaireDTO" type="br.com.nsol.gestfin.dto.CompanyQuestionaireDTO" />
+		<typeAlias alias="TaxDTO" type="br.com.nsol.gestfin.dto.TaxDTO" />
+		<typeAlias alias="TerminalDTO" type="br.com.nsol.gestfin.dto.TerminalDTO" />
+		<typeAlias alias="TransactionTypeDTO" type="br.com.nsol.gestfin.dto.TransactionTypeDTO" />
+		<typeAlias alias="UserDTO" type="br.com.nsol.gestfin.dto.UserDTO" />
+	</typeAliases>
+
+	<environments default="${config.environment}">
+
+		<environment id="production">
+			<transactionManager type="${config.transaction.manager}" />
+			<dataSource type="JNDI">
+				<property name="data_source" value="${config.datasource}" />
+			</dataSource>
+		</environment>
+
+		<environment id="test">
+			<transactionManager type="${config.transaction.manager}" />
+
+			<dataSource type="POOLED">
+				<property name="driver" value="${db.driver}" />
+				<property name="url" value="${db.url}" />
+				<property name="username" value="${db.username}" />
+				<property name="password" value="${db.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="${config.mappers.path}/CommonDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/SystemParameterDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/TaxDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/TerminalDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/UserDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/ProfileDAOMapper.xml" />
+
+		<mapper resource="${config.mappers.path}/CompanyBusinessDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/CompanyEmployeeDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/CompanySellDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/CompanySizeDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/CompanyIssueDAOMapper.xml" />
+		<mapper resource="${config.mappers.path}/TaxRegimeDAOMapper.xml" />
+
+		<mapper resource="${config.mappers.path}/CompanyDAOMapper.xml" />
+	</mappers>
+
+</configuration>

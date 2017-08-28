@@ -1,0 +1,177 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="title">#{i18n['user_maintain.label.header.title']}</ui:define>
+	<ui:define name="content">
+		<!-- Menu superior (tablet e desktop) ou menu lateral (smartphone) -->
+		<h:panelGroup id="pnlUserRegister" styleClass="body-contents"
+			layout="block">
+			<h:form id="formUserRegister" prependId="false">
+				<script type="text/javascript">
+						var hasError;
+						function openNewModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-usuario-add').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.new-button'); 		           	
+				           	}
+						}
+						function openEditModal(data) {
+				           	if(data.status == 'success'){
+								$('#popup-dados-usuario-edit').modal({backdrop: 'static', keyboard: false});
+				           		enableControl('.edit-label-icon'); 		           	
+				           	}
+						}
+					</script>
+				<!-- Mensagens de erro e informação -->
+				<h:panelGroup styleClass="form-messages" id="messageGlobal">
+					<h:messages id="message-maintain-userid" errorClass="err"
+						infoClass="info" warnClass="warn" globalOnly="true" />
+				</h:panelGroup>
+				<div class="panel panel-default">
+					<!-- Título -->
+					<div class="panel-heading">
+						<div class="header-simple">
+							<span>#{i18n['user.record.title.label']}</span>
+						</div>
+					</div>
+					<div class="panel-body no-padding">
+						<div class="container-fluid no-padding">
+							<div class="row-fluid no-padding">
+								<div class="col-xs-12 col-sm-10 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:inputText pt:type="text"
+												pt:placeholder="#{i18n['user_maintain.input.name.placeholder']}"
+												value="#{userRegisterView.selectedName}" />
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:inputText pt:type="text"
+												pt:placeholder="#{i18n['user_maintain.input.email.placeholder']}"
+												value="#{userRegisterView.selectedMail}" />
+										</div>
+										<div class="col-xs-12 col-sm-4 field-padding">
+											<h:selectOneMenu id="searchProfile"
+												value="#{userRegisterView.selectedProfile}"
+												converter="entityConverter">
+												<f:selectItem
+													itemLabel="#{i18n['user_maintain.input.profile.placeholder']}" />
+												<f:selectItems value="#{userRegisterView.listProfiles}"
+													var="item" itemValue="#{item}"
+													itemLabel="#{item.profileName}" />
+											</h:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-2 no-padding">
+									<div class="row-fluid no-padding">
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="search-button"
+												value="#{i18n['btn.search']}">
+												<f:ajax event="action"
+													listener="#{userRegisterView.actionSearchUsers}"
+													execute="@form" render="@form pnlList messageGlobal" />
+											</h:commandLink>
+										</div>
+										<div class="col-xs-6 col-sm-12 field-padding">
+											<h:commandLink styleClass="new-button"
+												value="#{i18n['btn.new']}"
+												onclick="disableControl('.new-button');">
+												<f:ajax event="action"
+													listener="#{userRegisterView.actionBeforeNewUserListener}"
+													execute="@this" onevent="openNewModal"
+													render="popup-dados-usuario-add formNewUser" />
+											</h:commandLink>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h:panelGroup id="pnlList" layout="block">
+								<h:panelGroup styleClass="row-fluid" id="div-resultado"
+									rendered="#{userRegisterView.listSelectedUsers.size() gt 0}">
+
+									<!-- Indicador de quantidade retornada -->
+									<h:panelGroup id="pageViewID"
+										styleClass="col-xs-12 col-sm-12 data-table-info">
+										<label class="field-contents-bold" id="search-info">#{userRegisterView.youAreSeeing}</label>
+									</h:panelGroup>
+									<!-- Resultado -->
+									<div class="col-xs-12 col-sm-12 table-responsive">
+										<h:dataTable id="dataTableUser"
+											value="#{userRegisterView.listSelectedUsers}" var="item"
+											styleClass="no-padding table table-striped data-table"
+											rows="#{userRegisterView.numberLines}">
+
+											<h:column pt:class="text-center">
+												<!-- column header -->
+												<f:facet name="header">#{i18n['user_maintain.label.name']}</f:facet>
+												<!-- row record -->
+												<h:outputText value="#{item.userName}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['user_maintain.label.email']}</f:facet>
+												<h:outputText value="#{item.userMail}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['user_maintain.label.profile']}</f:facet>
+												<h:outputText
+													value="#{item.profileName}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['user_maintain.label.active']}</f:facet>
+												<h:outputText
+													value="#{userRegisterView.getMessageBundle(item.isActiveBundle)}" />
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['user_maintain.label.last_update']}</f:facet>
+												<h:outputText value="#{item.lastUpdateDate}">
+													<f:convertDateTime pattern="#{i18n['date_time.format.pattern']}" 
+														locale="#{i18n['date_time.format.locale']}"
+														timeZone="#{i18n['date_time.format.timezone']}" />
+												</h:outputText>
+											</h:column>
+											<h:column pt:class="text-center">
+												<f:facet name="header">#{i18n['user_maintain.label.responsable']}</f:facet>
+												<h:outputText value="#{item.lastUpdatedByUser}" />
+											</h:column>
+
+											<h:column pt:class="actions">
+												<h:commandLink styleClass="edit-label-icon"
+													onclick="disableControl('.edit-label-icon');">
+													<h:outputLabel
+														pt:title="#{i18n['user_maintain.label.edit']}" />
+													<f:ajax event="action"
+														listener="#{userRegisterView.loadEditForm(item)}"
+														execute="@this" onevent="openEditModal"
+														render="popup-dados-usuario-edit formEdit" />
+												</h:commandLink>
+											</h:column>
+										</h:dataTable>
+									</div>
+
+									<!-- Botões inferiores -->
+									<div class="col-xs-12 col-sm-12 bottom-border"></div>
+									<h:panelGroup id="panelShowMore"
+										styleClass="col-xs-12 col-sm-4 col-sm-push-4 button-padding">
+										<h:commandButton styleClass="btn normal-button"
+											action="#{userRegisterView.addMoreLines}"
+											rendered="#{userRegisterView.numberLines lt userRegisterView.listSelectedUsers.size()}"
+											id="mostrar-mais"
+											value="#{i18n['user_maintain.label.show_more']}">
+											<f:ajax event="action" execute="@this"
+												render="dataTableUser pageViewID panelShowMore" />
+										</h:commandButton>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<ui:include src="/pages/administracao/modal-dados-usuario.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>
